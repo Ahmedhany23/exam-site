@@ -1,15 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-
-import ClassicEditor from "@/lib/ckeditor5/build/ckeditor";
+import type { Editor as ClassicEditorType } from "@ckeditor/ckeditor5-core";
 
 export function RichTextEditor() {
-  const { Editor } = ClassicEditor;
-  if (typeof window === "undefined") {
-    return null;
-  }
+  const [Editor, setEditor] = useState<typeof ClassicEditorType | null>(null);
+
+  useEffect(() => {
+    import("@/lib/ckeditor5/build/ckeditor").then(
+      (
+        mod: { default: typeof ClassicEditorType } & {
+          Editor?: typeof ClassicEditorType;
+        }
+      ) => {
+        setEditor(() => (mod.Editor ? mod.Editor : mod.default));
+      }
+    );
+  }, []);
+
+  if (!Editor) return null;
 
   return (
     <div className="w-full">
@@ -62,7 +72,6 @@ export function RichTextEditor() {
             ],
             shouldNotGroupWhenFull: true,
           },
-
           image: {
             toolbar: [
               "imageTextAlternative",
@@ -84,11 +93,11 @@ export function RichTextEditor() {
         }}
         data="<p>ابدأ بالكتابة هنا...</p>"
         onChange={(
-          event: React.ChangeEvent,
-          editor: { getData: () => string }
+          _: React.ChangeEvent<HTMLInputElement>,
+          editor: ClassicEditorType
         ) => {
           const data = editor.getData();
-          console.log(" data:", data);
+          console.log("data:", data);
         }}
       />
     </div>

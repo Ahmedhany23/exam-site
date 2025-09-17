@@ -7,15 +7,13 @@ export const LoginComponent = () => {
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-lg">
         {/* Header */}
         <div className="mb-6 text-center">
-          <h1 className="text-3xl font-bold text-gray-900">Welcome Back</h1>
+          <h1 className="text-3xl font-bold text-gray-900">مرحباً بعودتك</h1>
           <p className="mt-2 text-sm text-gray-500">
-            Please login to your account
+            من فضلك قم بتسجيل الدخول إلى حسابك
           </p>
         </div>
-
         {/* Login form */}
         <Login_form />
-
       </div>
     </div>
   );

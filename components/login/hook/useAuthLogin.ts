@@ -10,7 +10,6 @@ export const useAuthLogin = () => {
   const pathname = usePathname();
   const router = useRouter();
 
- 
   const role = pathname.includes("/admin")
     ? "admin"
     : pathname.includes("/teacher")
@@ -59,13 +58,14 @@ export const useAuthLogin = () => {
         }
 
         toast.success("تم تسجيل الدخول بنجاح 🎉");
-        router.push(redirectPaths[role]);
+        router.push(redirectPaths[role], { scroll: false });
+        router.refresh();
       } catch (err) {
         toast.error("حصل خطأ أثناء حفظ بيانات الدخول");
       }
     },
 
-    onError: (err:any) => {
+    onError: (err: any) => {
       toast.error(err?.response?.data?.message);
     },
   });

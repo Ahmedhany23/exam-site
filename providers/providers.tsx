@@ -1,11 +1,19 @@
 "use client";
 
+import { responseUserType } from "@/hooks/useGetUser";
+import { useUserStore } from "@/hooks/useUserStore";
+import { userType } from "@/types/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
-export function Providers({ children }: { children: React.ReactNode }) {
+type props = {
+  children: React.ReactNode;
+  user: responseUserType | null;
+};
+
+export function Providers({ children, user }: props) {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -19,9 +27,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
       })
   );
 
+  const setUser = useUserStore((state) => state.setUser);
+
+  useLayoutEffect(() => {
+    setUser(user?.data || null);
+  }, [user, setUser]);
+
   return (
     <QueryClientProvider client={queryClient}>
-     <Toaster />
+      <Toaster />
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

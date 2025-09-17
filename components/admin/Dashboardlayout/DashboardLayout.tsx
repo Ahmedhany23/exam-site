@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAuthLogout } from "@/actions/useAuthLogout";
+import { useUserStore } from "@/hooks/useUserStore";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -37,8 +38,8 @@ type LayoutProps = {
 const navItems = [
   { href: "/admin/dashboard", label: "الرئيسية", icon: Home },
   { href: "/admin/teacher", label: "المدرسين", icon: Users },
-  { href: "/settings", label: "الإعدادات", icon: Settings },
-  { href: "/profile", label: "الملف الشخصي", icon: User },
+  { href: "/admin/supervisors", label: "المراقبين", icon: Users },
+  { href: "/admin/profile", label: "الملف الشخصي", icon: User },
 ];
 
 export function DashboardLayout({ children }: LayoutProps) {
@@ -46,6 +47,8 @@ export function DashboardLayout({ children }: LayoutProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const { logout, logoutLoading } = useAuthLogout();
+
+  const user = useUserStore((state) => state.user);
 
   if (pathname === "/admin/login") {
     return children;
@@ -56,7 +59,7 @@ export function DashboardLayout({ children }: LayoutProps) {
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 md:hidden"
+          className="fixed inset-0 z-40 bg-black/50 md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -72,8 +75,8 @@ export function DashboardLayout({ children }: LayoutProps) {
         {/* Sidebar Header */}
         <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 flex items-center justify-center shadow-lg">
-              <HomeIcon color="white" />
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-100 via-purple-100 to-indigo-100 flex items-center justify-center shadow-sm">
+              <HomeIcon className="text-blue-600" />
             </div>
           </div>
           <Button
@@ -98,23 +101,23 @@ export function DashboardLayout({ children }: LayoutProps) {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`
                   group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-700 shadow-sm border border-blue-100"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }
+                   ${
+                     isActive
+                       ? "bg-blue-50 text-blue-600 shadow-sm"
+                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                   }
                 `}
               >
                 <Icon
                   className={`h-5 w-5 transition-colors ${
                     isActive
-                      ? "text-blue-600"
-                      : "text-gray-400 group-hover:text-gray-600"
+                      ? "text-blue-500"
+                      : "text-gray-400 group-hover:text-slate-600"
                   }`}
                 />
                 <span className="font-medium">{label}</span>
                 {isActive && (
-                  <div className="mr-auto h-2 w-2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+                  <div className="mr-auto h-2 w-2 rounded-full bg-blue-400"></div>
                 )}
               </Link>
             );
@@ -151,18 +154,16 @@ export function DashboardLayout({ children }: LayoutProps) {
                   >
                     <div className="hidden md:block text-right">
                       <div className="text-sm font-semibold text-gray-900">
-                        محمد أحمد
+                        {user?.name}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        mohamed@example.com
-                      </div>
+                      <div className="text-xs text-gray-500">{user?.email}</div>
                     </div>
                     <Avatar className="h-9 w-9 shadow-sm">
                       <AvatarImage
                         src="https://github.com/shadcn.png"
                         alt="صورة المستخدم"
                       />
-                      <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold">
+                      <AvatarFallback className="bg-gradient-to-r from-blue-100 to-purple-100 text-slate-700 font-bold">
                         م
                       </AvatarFallback>
                     </Avatar>
@@ -173,22 +174,27 @@ export function DashboardLayout({ children }: LayoutProps) {
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1 text-right">
                       <p className="text-sm font-semibold leading-none">
-                        محمد أحمد
+                        {user?.name}
                       </p>
                       <p className="text-xs leading-none text-gray-500">
-                        mohamed@example.com
+                        {user?.email}
                       </p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer text-right">
-                    <User className="ml-2 h-4 w-4" />
-                    الملف الشخصي
+                  <DropdownMenuItem>
+                    <Link
+                      href={"/admin/profile"}
+                      className="cursor-pointer text-right w-full flex gap-2 items-center"
+                    >
+                      <User className="ml-2 h-4 w-4" />
+                      الملف الشخصي
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer text-right">
+                  {/*     <DropdownMenuItem className="cursor-pointer text-right">
                     <Settings className="ml-2 h-4 w-4" />
                     الإعدادات
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={logout}
@@ -210,7 +216,7 @@ export function DashboardLayout({ children }: LayoutProps) {
 
         {/* Enhanced Page content */}
         <main className="flex-1 overflow-y-auto">
-          <div className="min-h-full bg-gradient-to-bl from-gray-50 via-blue-50/30 to-indigo-50/40 p-6">
+          <div className="min-h-full bg-slate-50 p-6">
             <div className="mx-auto max-w-7xl">{children}</div>
           </div>
         </main>

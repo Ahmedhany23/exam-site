@@ -1,8 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -17,11 +16,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
 import { useAuthLogin } from "../hook/useAuthLogin";
-import toast from "react-hot-toast";
 
 // ✅ Schema
 export const formSchema = z.object({
-  email: z.string().email("بريد غير صالح"),
+  email: z
+    .string()
+    .refine(
+      (value) => /^\S+@\S+\.\S+$/.test(value),
+      "البريد الإلكتروني غير صحيح"
+    ),
   password: z.string().min(6, "كلمة المرور لا تقل عن 6 أحرف"),
 });
 
@@ -34,7 +37,7 @@ export function Login_form() {
   const { loginMutation, loginLoading } = useAuthLogin();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    loginMutation(values)
+    loginMutation(values);
   }
 
   return (
@@ -56,6 +59,7 @@ export function Login_form() {
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -69,6 +73,7 @@ export function Login_form() {
                 <FormControl>
                   <Input placeholder="••••••••" type="password" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
