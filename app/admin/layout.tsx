@@ -1,4 +1,4 @@
-import { DashboardLayout } from "@/components/admin/Dashboardlayout/DashboardLayout";
+import { DashboardLayout } from "@/src/components/admin/Dashboardlayout/DashboardLayout";
 
 
 

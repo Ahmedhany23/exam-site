@@ -1,17 +1,57 @@
-import { UseFormReturn, FieldValues, Path } from "react-hook-form";
+import { UseFormReturn, FieldPath } from "react-hook-form";
 
-export function FormError<T extends FieldValues>(
-  err: any,
+interface APIError {
+  message: string;
+  errors?: Record<string, string[]>;
+}
+
+interface APIErrorResponse {
+  response?: {
+    data?: APIError;
+  };
+  data?: APIError;
+}
+
+export function FormError<T extends Record<string, any>>(
+  error: APIErrorResponse | any,
   form: UseFormReturn<T>
 ) {
-  if (err?.errors && Array.isArray(err.errors)) {
-    err.errors.forEach((error: { field: string; message: string }) => {
-      form.setError(error.field as Path<T>, {
-        type: "server",
-        message: error.message,
-      });
+  const errorData = error?.response?.data || error?.data || error;
+
+  if (errorData?.errors && typeof errorData.errors === "object") {
+    const errors = errorData.errors;
+
+    form.clearErrors();
+
+    Object.keys(errors).forEach((fieldName) => {
+      const fieldErrors = errors[fieldName];
+
+      if (Array.isArray(fieldErrors) && fieldErrors.length > 0) {
+        const firstError = fieldErrors[0];
+
+        if (fieldName in form.getValues()) {
+          form.setError(fieldName as FieldPath<T>, {
+            type: "server",
+            message: firstError,
+          });
+        }
+      }
     });
-  } else {
-    console.error("Unexpected error:", err);
+
+    if (errorData.message) {
+      console.error("API Error:", errorData.message);
+    }
+
+    return true;
   }
+
+  if (errorData?.message) {
+    console.error("API Error:", errorData.message);
+
+    return true;
+  }
+
+  console.error("Unexpected error:", error);
+
+  return false;
 }

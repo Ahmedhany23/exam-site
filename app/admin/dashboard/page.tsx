@@ -1,13 +1,9 @@
-import { RichTextEditor } from '@/tools/Editor/RichTextEditor';
-import { Metadata } from 'next';
-import React from 'react'
+import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 const page = () => {
-  return (
-   <RichTextEditor/>
-  )
-}
+  return <></>;
+};
 
-export default page
+export default page;

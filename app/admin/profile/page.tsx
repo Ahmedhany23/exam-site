@@ -1,4 +1,5 @@
-import { ProfileComponent } from "@/components/admin/profile/ProfileComponent";
+
+import { ProfileComponent } from "@/src/components/admin/profile/ProfileComponent";
 import { Metadata } from "next";
 import React from "react";
 

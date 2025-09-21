@@ -1,4 +1,5 @@
-import { TeachersComponent } from "@/components/admin/teacher/TeachersComponent";
+
+import { TeachersComponent } from "@/src/components/admin/teacher/TeachersComponent";
 import { Metadata } from "next";
 import React from "react";
 
