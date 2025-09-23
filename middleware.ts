@@ -1,33 +1,57 @@
 import { NextRequest, NextResponse } from "next/server";
+import { userType } from "./src/types/types";
+
+type UserType = userType["user_type"];
+
+// Define access rules for each user type
+const accessRules: Record<UserType, string[]> = {
+  ministry_admin: ["/dashboard", "/school-admins", "/teachers"],
+  school_admin: ["/dashboard", "/students"],
+  teacher: ["/dashboard"],
+  student: ["/dashboard"],
+};
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const adminToken = request.cookies.get("AdminToken")?.value;
-  const teacherToken = request.cookies.get("TeacherToken")?.value;
-  const studentToken = request.cookies.get("StudentToken")?.value;
+  const token = request.cookies.get("token")?.value;
+  const userType = request.cookies.get("userType")?.value as
+    | UserType
+    | undefined;
 
+  // Allow access to login page without token
+  if (pathname.startsWith("/login") && !token) {
+    return NextResponse.next();
+  }
+
+  // If no token, redirect to login
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  // Redirect root path to dashboard
   if (pathname === "/") {
-    if (adminToken) return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    if (teacherToken) return NextResponse.redirect(new URL("/teacher/dashboard", request.url));
-    if (studentToken) return NextResponse.redirect(new URL("/student/dashboard", request.url));
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login") && !adminToken) {
-    return NextResponse.redirect(new URL("/admin/login", request.url));
+  // If logged in and trying to access login page, redirect to dashboard
+  if (pathname.startsWith("/login") && token) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (pathname.startsWith("/teacher") && !pathname.startsWith("/teacher/login") && !teacherToken) {
-    return NextResponse.redirect(new URL("/teacher/login", request.url));
-  }
+  // Check role-based access
+  if (userType && accessRules[userType]) {
+    const allowedPaths = accessRules[userType];
+    const isAllowed = allowedPaths.some((path) => pathname.startsWith(path));
 
-  if (pathname.startsWith("/student") && !pathname.startsWith("/student/login") && !studentToken) {
-    return NextResponse.redirect(new URL("/student/login", request.url));
+    // If the route is not allowed for this user type
+    if (!isAllowed && allowedPaths.length > 0) {
+      return NextResponse.redirect(new URL("/not-found", request.url));
+    }
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/admin/:path*", "/teacher/:path*", "/student/:path*"],
+  matcher: ["/", "/login", "/students", "/school-admins", "/teachers"],
 };

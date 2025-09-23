@@ -31,3 +31,14 @@ export interface Teacher {
   email_verified_at: string | null;
   actions: any;
 }
+
+export interface Subject {
+  id: number;
+  name: string;
+  code: string;
+  section: "scientific" | "literature" | "common";
+  duration_minutes: number;
+  max_score: number;
+  has_essay_questions: boolean;
+  is_active: boolean;
+}

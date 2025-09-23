@@ -8,10 +8,7 @@ export async function handleLogout() {
   const headersList = await headers();
   const fullUrl = headersList.get("referer") || "";
 
-  const token =
-    cookieStore.get("AdminToken")?.value ||
-    cookieStore.get("TeacherToken")?.value ||
-    cookieStore.get("StudentToken")?.value;
+  const token = cookieStore.get("token")?.value;
 
   if (token) {
     try {
@@ -27,15 +24,10 @@ export async function handleLogout() {
     }
   }
 
-  cookieStore.delete("AdminToken");
-  cookieStore.delete("TeacherToken");
-  cookieStore.delete("StudentToken");
+  cookieStore.delete("token");
+  cookieStore.delete("userType");
 
-  if (fullUrl.includes("/admin")) {
-    redirect("/admin/login");
-  } else if (fullUrl.includes("/teacher")) {
-    redirect("/teacher/login");
-  } else {
-    redirect("/student/login");
+  if (fullUrl) {
+    redirect("/login");
   }
 }

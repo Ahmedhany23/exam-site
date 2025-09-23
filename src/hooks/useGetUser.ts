@@ -1,26 +1,20 @@
-
 import { cookies } from "next/headers";
 import { userType } from "../types/types";
 import axiosInstance from "@/lib/axios";
 
 export type responseUserType = {
-    success: boolean;
-    data: userType | null
-}
+  success: boolean;
+  data: userType | null;
+};
 
-export const useGetUser = async () : Promise<responseUserType | null> => {
+export const useGetUser = async (): Promise<responseUserType | null> => {
   const cookieStore = await cookies();
 
-  const adminToken = cookieStore.get("AdminToken")?.value;
-  const teacherToken = cookieStore.get("TeacherToken")?.value;
-  const studentToken = cookieStore.get("StudentToken")?.value;
+  const token = cookieStore.get("token")?.value;
 
-
-  if (!adminToken && !teacherToken && !studentToken) {
+  if (!token) {
     return null;
   }
-
-  const token = adminToken || teacherToken || studentToken;
 
   try {
     const response = await axiosInstance.get<responseUserType>("/v1/me", {
@@ -28,7 +22,7 @@ export const useGetUser = async () : Promise<responseUserType | null> => {
         Authorization: `Bearer ${token}`,
       },
     });
-   
+
     return response.data;
   } catch {
     return null;

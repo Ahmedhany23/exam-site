@@ -7,32 +7,7 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
 export const useAuthLogin = () => {
-  const pathname = usePathname();
   const router = useRouter();
-
-  const role = pathname.includes("/admin")
-    ? "admin"
-    : pathname.includes("/teacher")
-    ? "teacher"
-    : "student";
-
-  const loginUrls: Record<string, string> = {
-    admin: "/admin/login",
-    teacher: "/teacher/login",
-    student: "/login",
-  };
-
-  const redirectPaths: Record<string, string> = {
-    admin: "/admin/dashboard",
-    teacher: "/teacher/lectures",
-    student: "/student/home",
-  };
-
-  const tokenKeys: Record<string, string> = {
-    admin: "AdminToken",
-    teacher: "TeacherToken",
-    student: "StudentToken",
-  };
 
   const {
     mutateAsync: loginMutation,
@@ -44,13 +19,18 @@ export const useAuthLogin = () => {
 
     onSuccess: ({ data }) => {
       try {
-        const tokenKey = tokenKeys[role];
         const token = data?.data?.access_token;
         const expiresAt = data?.data?.expires_at;
+        const userType = data?.data?.user?.user_type;
 
-        if (token && expiresAt) {
+        if (token && expiresAt && userType) {
           const expiresDate = new Date(expiresAt);
-          Cookies.set(tokenKey, token, {
+          Cookies.set("token", token, {
+            expires: expiresDate,
+            secure: true,
+            sameSite: "strict",
+          });
+          Cookies.set("userType", userType, {
             expires: expiresDate,
             secure: true,
             sameSite: "strict",
@@ -58,7 +38,7 @@ export const useAuthLogin = () => {
         }
 
         toast.success("تم تسجيل الدخول بنجاح 🎉");
-        router.push(redirectPaths[role], { scroll: false });
+        router.push("/dashboard", { scroll: false });
         router.refresh();
       } catch (err) {
         toast.error("حصل خطأ أثناء حفظ بيانات الدخول");

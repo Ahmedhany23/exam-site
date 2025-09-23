@@ -1,12 +1,12 @@
 "use client";
 
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { responseUserType } from "../hooks/useGetUser";
 import { useUserStore } from "../hooks/useUserStore";
+import { DashboardLayout } from "../components/dashboardlayout/DashboardLayout";
 
 type props = {
   children: React.ReactNode;
@@ -29,6 +29,7 @@ export function Providers({ children, user }: props) {
 
   const setUser = useUserStore((state) => state.setUser);
 
+
   useLayoutEffect(() => {
     setUser(user?.data || null);
   }, [user, setUser]);
@@ -36,7 +37,7 @@ export function Providers({ children, user }: props) {
   return (
     <QueryClientProvider client={queryClient}>
       <Toaster />
-      {children}
+      <DashboardLayout>{children}</DashboardLayout>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
