@@ -28,6 +28,7 @@ export default async function RootLayout({
 }>) {
   const user: responseUserType | null = await useGetUser();
 
+
   return (
     <html lang="ar" dir="rtl">
       <head>

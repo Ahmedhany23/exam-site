@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { useAddEditTeacher, useGetTeacher } from "../hooks/useTeacherApi";
-import { FormError } from "@/lib/FormError";
+import { FormError } from "@/src/lib/FormError";
 import {
   addTeacherSchema,
   editTeacherSchema,
@@ -283,24 +283,22 @@ export function AddEditTeacher_form() {
             label="الرقم القومي *"
             placeholder="الرقم القومي"
           />
-          {!teacherId && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextField
-                form={form}
-                name="password"
-                label="كلمة المرور *"
-                type="password"
-                placeholder="********"
-              />
-              <TextField
-                form={form}
-                name="password_confirmation"
-                label="تأكيد كلمة المرور *"
-                type="password"
-                placeholder="********"
-              />
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <TextField
+              form={form}
+              name="password"
+              label="كلمة المرور *"
+              type="password"
+              placeholder="********"
+            />
+            <TextField
+              form={form}
+              name="password_confirmation"
+              label="تأكيد كلمة المرور *"
+              type="password"
+              placeholder="********"
+            />
+          </div>
 
           <SelectField
             form={form}

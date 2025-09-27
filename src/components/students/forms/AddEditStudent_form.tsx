@@ -22,9 +22,8 @@ import {
 import { AddEditStudentSchema } from "../schema/StudentSchema";
 import z from "zod";
 import { useAddEditStudent } from "../hook/useStudentsApis";
-import { useParams } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
-import { FormError } from "@/lib/FormError";
+import { FormError } from "@/src/lib/FormError";
 import { useRouter } from "next/navigation";
 
 type FormValues = z.infer<typeof AddEditStudentSchema>;

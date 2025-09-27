@@ -45,7 +45,6 @@ export const TeachersComponent = () => {
       header: "إجراءات",
       render: (row) => (
         <div className="flex gap-2">
-          {/* تعديل */}
           <Link href={`/teacher/${row.teacher_id}/edit`}>
             <Button size="sm" type="button">
               تعديل

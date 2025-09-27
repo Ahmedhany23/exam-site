@@ -1,5 +1,5 @@
 "use client";
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/src/lib/axios";
 import {
   keepPreviousData,
   useMutation,
@@ -46,7 +46,7 @@ export const useGetTeacher = (teacherId: string) => {
       return res.data;
     },
     refetchOnWindowFocus: true,
-    enabled: Boolean(teacherId),
+    enabled: !!teacherId,
   });
 };
 

@@ -37,7 +37,7 @@ const baseTeacherSchema = z.object({
     .string()
     .length(14, "الرقم القومي يجب أن يكون 14 رقمًا")
     .regex(/^\d+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط"),
-  subject_id: z.number({ message: "يجب اختيار المادة" }).optional(),
+  subject_id: z.string().min(1, { message: "المادة مطلوبة" }),
   teacher_type: z.enum(["regular", "supervisor"]).optional(),
   can_create_exams: z.boolean().optional(),
   can_correct_essays: z.boolean().optional(),

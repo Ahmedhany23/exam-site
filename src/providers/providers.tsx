@@ -26,6 +26,7 @@ export function Providers({ children, user }: props) {
         },
       })
   );
+  
 
   const setUser = useUserStore((state) => state.setUser);
 

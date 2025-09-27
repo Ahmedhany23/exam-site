@@ -1,4 +1,4 @@
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/src/lib/axios";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { AddEditStudentSchemaType } from "../schema/StudentSchema";

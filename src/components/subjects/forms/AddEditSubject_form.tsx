@@ -26,7 +26,7 @@ import {
 } from "../schema/SubjectSchema";
 import { useAddOrEditSubject, useGetSubject } from "../hooks/useSubjectsApi";
 import { useParams, useRouter } from "next/navigation";
-import { FormError } from "@/lib/FormError";
+import { FormError } from "@/src/lib/FormError";
 import { useEffect } from "react";
 
 export const AddEditSubject_form = () => {

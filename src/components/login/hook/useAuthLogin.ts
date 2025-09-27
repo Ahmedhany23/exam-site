@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
-import axiosInstance from "@/lib/axios";
+import axiosInstance from "@/src/lib/axios";
 import { formSchema } from "../form/Login_form";
 import * as z from "zod";
 import toast from "react-hot-toast";

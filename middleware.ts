@@ -5,9 +5,9 @@ type UserType = userType["user_type"];
 
 // Define access rules for each user type
 const accessRules: Record<UserType, string[]> = {
-  ministry_admin: ["/dashboard", "/school-admins", "/teachers"],
+  ministry_admin: ["/dashboard", "/school-admins", "/teachers", "/exams"],
   school_admin: ["/dashboard", "/students"],
-  teacher: ["/dashboard"],
+  teacher: ["/dashboard", "/exams"],
   student: ["/dashboard"],
 };
 
@@ -53,5 +53,12 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/login", "/students", "/school-admins", "/teachers"],
+  matcher: [
+    "/",
+    "/login",
+    "/students",
+    "/school-admins",
+    "/teachers",
+    "/exams",
+  ],
 };

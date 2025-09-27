@@ -1,11 +1,9 @@
 "use client";
-import Link from "next/link";
 import { Button } from "@/src/components/ui/button";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
-import { Column, DataTable } from "@/src/tools/Tables/DataTable";
-import { Teacher } from "@/src/types/types";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,35 +15,84 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
+import { Column, DataTable } from "@/src/tools/Tables/DataTable";
+import {
+  useDeleteSchoolAdmin,
+  useGetSchoolAdmins,
+} from "./hook/useSchoolAdminApis";
 
 export const SchoolAdminComponent = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
-  /*  const columns: Column<Teacher>[] = [
-    { key: "id", header: "ID", align: "right" },
-    { key: "name", header: "الاسم", align: "right" },
-    { key: "email", header: "البريد", align: "right" },
+  const { data, isLoading, error } = useGetSchoolAdmins(page, pageSize);
+
+  const { deleteSchoolAdminMutation, deleteSchoolAdminLoading } =
+    useDeleteSchoolAdmin();
+
+  const schoolAdmins = data?.data ?? [];
+  const total = data?.meta.total ?? 0;
+
+  const columns: Column<any>[] = [
+    {
+      key: "name",
+      header: "الاسم",
+      align: "right",
+      render: (row) => `${row.user.name}`,
+    },
+    {
+      key: "email",
+      header: "البريد",
+      align: "right",
+      render: (row) => `${row.user.email}`,
+    },
+    {
+      key: "phone",
+      header: "الهاتف",
+      align: "right",
+      render: (row) => `${row.user.phone}`,
+    },
+    {
+      key: "national_id",
+      header: "رقم القومي",
+      align: "right",
+      render: (row) => `${row.user.national_id}`,
+    },
+    {
+      key: "admin_permissions",
+      header: "صلاحيات",
+      align: "right",
+      render: (row) => {
+        const perms = row.admin_permissions;
+        return Object.keys(perms)
+          .filter((key) => perms[key])
+          .map((key) => {
+            switch (key) {
+              case "manage_exams":
+                return "إدارة الامتحانات";
+              case "view_reports":
+                return "عرض التقارير";
+              case "manage_students":
+                return "إدارة الطلاب";
+              case "manage_school_settings":
+                return "إعدادات المدرسة";
+              default:
+                return key;
+            }
+          })
+          .join("، ");
+      },
+    },
     {
       key: "actions",
       header: "إجراءات",
       render: (row) => (
         <div className="flex gap-2">
-
-          <Link href={`/teacher/${row.teacher_id}/edit`}>
+          <Link href={`/school-admins/${row.id}/edit`}>
             <Button size="sm" type="button">
               تعديل
             </Button>
           </Link>
-
-          <Button
-            size="sm"
-            variant={row.is_active ? "default" : "destructive"}
-            disabled={toggleStatusLoading}
-            onClick={async () => await toggleStatusMutation(row.teacher_id)}
-          >
-            {row.is_active ? " نشط" : " غير نشط"}
-          </Button>
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -57,7 +104,7 @@ export const SchoolAdminComponent = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>تأكيد الحذف</AlertDialogTitle>
                 <AlertDialogDescription>
-                  هل أنت متأكد أنك تريد حذف هذا المدرس؟ لا يمكن التراجع عن هذه
+                  هل أنت متأكد أنك تريد حذف هذا المدير؟ لا يمكن التراجع عن هذه
                   العملية.
                 </AlertDialogDescription>
               </AlertDialogHeader>
@@ -65,10 +112,8 @@ export const SchoolAdminComponent = () => {
                 <AlertDialogCancel>إلغاء</AlertDialogCancel>
                 <AlertDialogAction
                   type="submit"
-                  disabled={deleteTeacherLoading}
-                  onClick={async () =>
-                    await deleteTeacherMutation(row.teacher_id)
-                  }
+                  disabled={deleteSchoolAdminLoading}
+                  onClick={async () => await deleteSchoolAdminMutation(row.id)}
                 >
                   نعم، احذف
                 </AlertDialogAction>
@@ -78,7 +123,7 @@ export const SchoolAdminComponent = () => {
         </div>
       ),
     },
-  ]; */
+  ];
 
   return (
     <div className="space-y-6">
@@ -94,11 +139,11 @@ export const SchoolAdminComponent = () => {
       </div>
 
       {/* Table */}
-      {/*   {error ? (
+      {error ? (
         <div className="text-red-600">حدث خطأ أثناء جلب البيانات</div>
       ) : (
         <DataTable
-          data={teachers}
+          data={schoolAdmins}
           loading={isLoading}
           columns={columns}
           page={page}
@@ -107,7 +152,7 @@ export const SchoolAdminComponent = () => {
           onPageChange={setPage}
           onPageSizeChange={setPageSize}
         />
-      )} */}
+      )}
     </div>
   );
 };
