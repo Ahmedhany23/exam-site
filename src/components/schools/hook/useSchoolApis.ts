@@ -1,14 +1,25 @@
 import axiosInstance from "@/src/lib/axios";
+import { School } from "@/src/types/types";
 import {
   keepPreviousData,
   useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
+type SchoolResponse = {
+  data: School[];
+  meta: {
+    total: number;
+    page: number;
+    per_page: number;
+  };
+};
+
 export const useGetSchools = (page: number, pageSize: number) => {
-  return useQuery({
+  return useQuery<SchoolResponse>({
     queryKey: ["school", page, pageSize],
     queryFn: async () => {
       const res = await axiosInstance.get("/v1/admin/schools", {
@@ -21,26 +32,44 @@ export const useGetSchools = (page: number, pageSize: number) => {
   });
 };
 
-export const useGetSchool = (adminId: string) => {
+export const useGetSchoolsByGovernorate = () => {
+  const searchParams = useSearchParams();
+  const governorate = searchParams.get("governorate_id");
+
+  return useQuery<SchoolResponse>({
+    queryKey: ["school", governorate],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/v1/admin/schools", {
+        params: { governorate_id: governorate },
+      });
+      return res.data;
+    },
+    refetchOnWindowFocus: true,
+    placeholderData: keepPreviousData,
+    enabled: !!governorate,
+  });
+};
+
+export const useGetSchool = (schoolId: string) => {
   return useQuery({
-    queryKey: ["school", adminId],
+    queryKey: ["school", schoolId],
     queryFn: async () => {
       const res = await axiosInstance
-        .get(`/v1/admin/schools/${adminId}`)
+        .get(`/v1/admin/schools/${schoolId}`)
         .then((res) => res.data);
       return res.data;
     },
     refetchOnWindowFocus: true,
-    enabled: !!adminId,
+    enabled: !!schoolId,
   });
 };
 
-export const useAddEditSchool = (adminId: string) => {
+export const useAddEditSchool = (schoolId: string) => {
   const queryClient = useQueryClient();
 
   const PostOrPut = (values: object) => {
-    if (adminId) {
-      return axiosInstance.put(`/v1/admin/schools/${adminId}`, values);
+    if (schoolId) {
+      return axiosInstance.put(`/v1/admin/schools/${schoolId}`, values);
     } else {
       return axiosInstance.post("/v1/admin/schools", values);
     }
@@ -55,7 +84,7 @@ export const useAddEditSchool = (adminId: string) => {
 
     onSuccess: ({ data }) => {
       toast.success(
-        adminId ? "تم تعديل المدرسة بنجاح 🎉" : "تم اضافة المدرسة بنجاح 🎉"
+        schoolId ? "تم تعديل المدرسة بنجاح 🎉" : "تم اضافة المدرسة بنجاح 🎉"
       );
       queryClient.invalidateQueries({ queryKey: ["school"] });
     },
@@ -74,24 +103,20 @@ export const useAddEditSchool = (adminId: string) => {
 
 export const useDeleteSchool = () => {
   const queryClient = useQueryClient();
-  const {
-    mutateAsync: deleteSchoolMutation,
-    isPending: deleteSchoolLoading,
-  } = useMutation({
-    mutationFn: async (adminId: number) => {
-      const res = await axiosInstance.delete(
-        `/v1/admin/schools/${adminId}`
-      );
-      return res.data;
-    },
-    onSuccess: ({ data }) => {
-      queryClient.invalidateQueries({ queryKey: ["school"] });
-      toast.success("تم حذف المدرسة بنجاح 🎉");
-    },
-    onError: (err: any) => {
-      toast.error(err?.response?.data?.message);
-    },
-  });
+  const { mutateAsync: deleteSchoolMutation, isPending: deleteSchoolLoading } =
+    useMutation({
+      mutationFn: async (schoolId: number) => {
+        const res = await axiosInstance.delete(`/v1/admin/schools/${schoolId}`);
+        return res.data;
+      },
+      onSuccess: ({ data }) => {
+        queryClient.invalidateQueries({ queryKey: ["school"] });
+        toast.success("تم حذف المدرسة بنجاح 🎉");
+      },
+      onError: (err: any) => {
+        toast.error(err?.response?.data?.message);
+      },
+    });
 
   return {
     deleteSchoolMutation,

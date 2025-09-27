@@ -8,7 +8,6 @@ import {
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import * as z from "zod";
-import { teacherSchema } from "../schema/TeacherSchema";
 import { Teacher } from "@/src/types/types";
 import { TeacherFormValues } from "../forms/AddEditTeacher_form";
 
@@ -39,10 +38,10 @@ export const useGetTeachers = (page: number, pageSize: number) => {
 };
 
 export const useGetTeacher = (teacherId: string) => {
-  return useQuery({
+  return useQuery<Teacher>({
     queryKey: ["teachers", teacherId],
     queryFn: async () => {
-      const res = await axiosInstance.get(`/v1/admin/teachers/${teacherId}`);
+      const res = await axiosInstance.get(`/v1/admin/teachers/${teacherId}`).then((res) => res.data);
       return res.data;
     },
     refetchOnWindowFocus: true,
@@ -55,7 +54,7 @@ export const useAddEditTeacher = (teacherId: string) => {
     if (teacherId) {
       return axiosInstance.put(`/v1/admin/teachers/${teacherId}`, values);
     } else {
-      return axiosInstance.post("/v1/admin/create-teacher", values);
+      return axiosInstance.post("/v1/admin/teachers", values);
     }
   };
 

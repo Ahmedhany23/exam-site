@@ -14,7 +14,7 @@ export const useAuthLogin = () => {
     isPending: loginLoading,
     error,
   } = useMutation({
-    mutationFn: (values: z.infer<typeof formSchema>) =>
+    mutationFn: (values: object) =>
       axiosInstance.post("/v1/auth/login", values),
 
     onSuccess: ({ data }) => {

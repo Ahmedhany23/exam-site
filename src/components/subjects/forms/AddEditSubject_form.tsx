@@ -28,6 +28,7 @@ import { useAddOrEditSubject, useGetSubject } from "../hooks/useSubjectsApi";
 import { useParams, useRouter } from "next/navigation";
 import { FormError } from "@/src/lib/FormError";
 import { useEffect } from "react";
+import { Loader } from "../../ui/loader";
 
 export const AddEditSubject_form = () => {
   const router = useRouter();
@@ -74,7 +75,7 @@ export const AddEditSubject_form = () => {
 
   if (isError) return <div>Something went wrong</div>;
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
   return (
     <Form {...form}>
       <form
@@ -111,7 +112,7 @@ export const AddEditSubject_form = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>الشعبة</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select dir="rtl" {...field} onValueChange={field.onChange} value={field.value}>
                 <SelectTrigger>
                   <SelectValue placeholder="اختر الشعبة" />
                 </SelectTrigger>

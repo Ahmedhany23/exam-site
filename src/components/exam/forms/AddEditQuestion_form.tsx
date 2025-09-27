@@ -32,6 +32,7 @@ import {
 } from "../hooks/useExamApi";
 import { FormError } from "@/src/lib/FormError";
 import { Loader2Icon } from "lucide-react";
+import { Loader } from "../../ui/loader";
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -71,58 +72,76 @@ export const AddEditQuestion_form = () => {
 
   const questionType = form.watch("question_type");
   const currentOptions = form.watch("options") || [];
+  const correctAnswer = form.watch("correct_answer");
 
+  // Effect لـ populate البيانات لما الـ question data تيجي
   React.useEffect(() => {
-    if (question) {
+    if (question && questionId) {
+      // Reset form with question data
       form.reset({
         question_text: question.question_text,
-        question_image: question.question_image,
+        question_image: question.question_image || "",
         question_type: question.question_type,
         points: Number(question.points),
-        options:
-          question.options?.map((option: string) => ({ value: option })) || [],
+        options: question.options?.map((option: string) => ({
+          value: option,
+        })) || [{ value: "" }, { value: "" }],
+        correct_answer: String(question.correct_answer || ""),
         is_required: question.is_required,
-        help_text: question.help_text ?? "",
+        help_text: question.help_text || "",
       });
     }
-  }, [question, form]);
+  }, [question, questionId, form]);
 
+  // Effect منفصل للـ correct_answer validation
   useEffect(() => {
     if (
-      question?.correct_answer &&
-      currentOptions.length > 0 &&
-      currentOptions.some((opt) => opt.value === question.correct_answer)
+      questionType === "multiple_choice" &&
+      correctAnswer &&
+      currentOptions.length > 0
     ) {
-      form.setValue("correct_answer", question.correct_answer, {
-        shouldValidate: false,
-      });
+      // تأكد إن الـ correct_answer موجود في الـ options
+      const isValidAnswer = currentOptions.some(
+        (opt) => opt.value === correctAnswer
+      );
+      if (!isValidAnswer && correctAnswer) {
+        // لو الـ correct_answer مش موجود في الـ options، امسحه
+        form.setValue("correct_answer", "", { shouldValidate: true });
+      }
     }
-  }, [currentOptions, question?.correct_answer]);
+  }, [currentOptions, correctAnswer, questionType, form]);
+
+
 
   const onSubmit = (values: FormValues) => {
-    let finalData = sectionId
-      ? {
-          ...values,
-          section_id: sectionId,
-          exam_id: examId,
-          options: values.options?.map((option) => option.value),
-        }
-      : {
-          ...values,
-          section_id: sectionId,
-          exam_id: examId,
-          options: values.options?.map((option) => option.value),
-        };
+    let finalData = {
+      ...values,
+      section_id: sectionId,
+      exam_id: examId,
+      options: values.options?.map((option) => option.value).filter(Boolean), 
+    };
+
+    console.log("Submitting data:", finalData);
 
     addOrEditExamQuestionMutation(finalData)
       .then(() => {
         router.back();
-        form.reset();
       })
       .catch((err) => FormError<FormValues>(err, form));
   };
 
-  if (isLoading) return <Loader2Icon className="animate-spin" />;
+  // Handle removing options
+  const handleRemoveOption = (index: number) => {
+    const optionToRemove = currentOptions[index];
+
+    if (optionToRemove && optionToRemove.value === correctAnswer) {
+      form.setValue("correct_answer", "", { shouldValidate: true });
+    }
+
+    remove(index);
+  };
+
+  if (isLoading) return <Loader />;
 
   return (
     <Form {...form}>
@@ -148,6 +167,7 @@ export const AddEditQuestion_form = () => {
             </FormItem>
           )}
         />
+
         {/* Question Image */}
         <FormField
           control={form.control}
@@ -174,7 +194,14 @@ export const AddEditQuestion_form = () => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>نوع السؤال</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select
+                dir="rtl"
+                onValueChange={(value) => {
+                  field.onChange(value);
+                  form.setValue("correct_answer", "", { shouldValidate: true });
+                }}
+                value={field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="اختر النوع" />
@@ -217,7 +244,7 @@ export const AddEditQuestion_form = () => {
                   type="button"
                   variant="destructive"
                   size="sm"
-                  onClick={() => remove(index)}
+                  onClick={() => handleRemoveOption(index)}
                   disabled={fields.length <= 2}
                 >
                   حذف
@@ -244,12 +271,24 @@ export const AddEditQuestion_form = () => {
             name="correct_answer"
             render={({ field }) => {
               if (questionType === "multiple_choice") {
+                const availableOptions = currentOptions.filter(
+                  (opt) => opt.value && opt.value.trim()
+                );
+
                 return (
                   <FormItem>
                     <FormLabel>الإجابة الصحيحة</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      key={`correct-answer-${availableOptions
+                        .map((o) => o.value)
+                        .join("-")}`}
+                      dir="rtl"
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        console.log("Selected correct answer:", value);
+                      }}
                       value={field.value || ""}
+                      defaultValue={field.value || ""}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -257,13 +296,19 @@ export const AddEditQuestion_form = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {currentOptions.map(
-                          (option, idx) =>
-                            option.value && (
-                              <SelectItem key={idx} value={option.value}>
-                                {option.value}
-                              </SelectItem>
-                            )
+                        {availableOptions.length === 0 ? (
+                          <div className="p-2 text-sm text-gray-500">
+                            أضف الاختيارات أولاً
+                          </div>
+                        ) : (
+                          availableOptions.map((option, idx) => (
+                            <SelectItem
+                              key={`${idx}-${option.value}`}
+                              value={option.value}
+                            >
+                              {option.value}
+                            </SelectItem>
+                          ))
                         )}
                       </SelectContent>
                     </Select>

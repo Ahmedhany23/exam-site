@@ -29,8 +29,13 @@ export function middleware(request: NextRequest) {
   }
 
   // Redirect root path to dashboard
-  if (pathname === "/") {
+  if (pathname === "/" && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // If not logged in and trying to access dashboard, redirect to login
+  if (pathname.startsWith("/dashboard") && !token) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // If logged in and trying to access login page, redirect to dashboard

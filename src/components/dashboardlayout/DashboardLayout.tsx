@@ -73,7 +73,7 @@ export function DashboardLayout({ children }: LayoutProps) {
         href: "/students",
         label: "الطلاب",
         icon: Users,
-        permission: user?.user_type === "school_admin",
+        permission: user?.user_type === "school_admin" || user?.user_type === "ministry_admin",
       },
       {
         href: "/school-admins",
@@ -97,7 +97,7 @@ export function DashboardLayout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 font-cairo" dir="rtl">
+    <div className="flex min-h-screen bg-gray-50 font-cairo" dir="rtl">
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div
@@ -109,13 +109,13 @@ export function DashboardLayout({ children }: LayoutProps) {
       {/* Sidebar */}
       <aside
         className={`
-        fixed inset-y-0 right-0 z-50 w-64 transform bg-white shadow-xl transition-transform duration-300 ease-in-out
+        fixed inset-y-0 right-0  z-50 w-64 transform bg-white shadow-xl transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:shadow-lg
         ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}
       `}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+        <div className="flex items-center justify-between border-b  border-gray-100  px-6 py-5">
           <div className="flex items-center gap-3">
             <div className="h-20 w-20 rounded-xl bg-gradient-to-br from-blue-100 via-purple-100 to-indigo-100 flex items-center justify-center shadow-sm">
               <Image src="/images/logo.png" alt="Logo" width={80} height={80} />
@@ -132,7 +132,7 @@ export function DashboardLayout({ children }: LayoutProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex flex-col gap-1 p-4">
+        <nav className="flex  flex-col gap-1 p-4 sticky top-0 ">
           {navItemsMemo.map(({ href, label, icon: Icon, permission }) => {
             const isActive = pathname.startsWith(href);
 

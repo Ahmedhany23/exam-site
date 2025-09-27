@@ -1,8 +1,26 @@
 "use client";
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/src/components/ui/form";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/src/components/ui/select";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/src/components/ui/form";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/src/components/ui/select";
 
-export default function SelectField({ form, name, label, options, placeholder }: any) {
+export default function SelectField({
+  form,
+  name,
+  label,
+  options,
+  placeholder,
+}: any) {
   return (
     <FormField
       control={form.control}
@@ -11,7 +29,12 @@ export default function SelectField({ form, name, label, options, placeholder }:
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              dir="rtl"
+              {...field}
+              onValueChange={field.onChange}
+              value={field.value}
+            >
               <SelectTrigger>
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>

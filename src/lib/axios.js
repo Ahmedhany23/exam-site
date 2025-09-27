@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 
 import Cookies from "js-cookie";
+import { handleLogout } from "../actions/auth";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -45,9 +46,8 @@ axiosInstance.interceptors.response.use(
   function (error) {
     // Handle the response error
     if (error.response && error.response.status === 401) {
-      Cookies.remove("token");
-      Cookies.remove("userType");
-      window.location.href = "/login";
+      ("use server");
+      handleLogout();
     }
     if (error.response.data.status === false) {
     }

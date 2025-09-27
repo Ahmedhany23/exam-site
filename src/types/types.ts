@@ -11,6 +11,22 @@ export interface userType {
   updated_at: string;
 }
 
+export interface SchoolAdmin {
+  id: number;
+  user: userType;
+  user_id: userType["id"];
+  is_active: boolean;
+  school: School;
+  school_id: School["id"];
+  admin_permissions: {
+    manage_exams: boolean;
+    view_reports: boolean;
+    manage_students: boolean;
+    manage_school_settings: boolean;
+  };
+  created_at: string;
+}
+
 export interface Teacher {
   id: number;
   teacher_id: number;
@@ -20,16 +36,37 @@ export interface Teacher {
   phone: string;
   national_id: string;
   subject_specialization: string;
-  teacher_type: "regular" | "admin" | "assistant";
+  teacher_type: "regular" | "supervisor";
+  assignment_type: "teaching" | "supervision" | "correction";
   can_create_exams: boolean;
   can_correct_essays: boolean;
-  is_active: boolean | number;
+  is_active: boolean ;
   user_type: "teacher" | "admin";
-  schools: any[]; // replace with School[] if you have a School type
+  schools: School[];
   created_at: string;
   updated_at: string;
   email_verified_at: string | null;
   actions: any;
+  subject_id: Subject["id"];
+}
+
+export interface Student {
+  id: number;
+  actions: any;
+  name: string;
+  student_code: string;
+  email: string;
+  phone: string;
+  national_id: string;
+  password: string;
+  seat_number: string;
+  academic_year: "first" | "second" | "third";
+  section: "scientific" | "literature" | "common";
+  birth_date: string;
+  school: School;
+  gender: "male" | "female";
+  guardian_phone: string;
+  is_banned: boolean;
 }
 
 export interface Subject {
@@ -111,5 +148,5 @@ export interface School {
   longitude: string;
   allowed_ip_range: string;
   is_active: boolean;
-  governorate: Governorate; 
+  governorate_id: Governorate["id"];
 }

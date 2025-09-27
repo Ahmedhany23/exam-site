@@ -30,10 +30,16 @@ import {
   useAddEditSchoolAdmin,
   useGetSchoolAdmin,
 } from "../hook/useSchoolAdminApis";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { Loader2Icon } from "lucide-react";
 import { FormError } from "@/src/lib/FormError";
 import { useRouter } from "next/navigation";
+import { useGetGovernorates } from "@/src/hooks/useGetGovernorate";
+import {
+  useGetSchools,
+  useGetSchoolsByGovernorate,
+} from "../../schools/hook/useSchoolApis";
+import { Loader } from "../../ui/loader";
 
 type AddSchoolAdminFormValues = z.infer<typeof addSchoolAdminSchema>;
 type EditSchoolAdminFormValues = z.infer<typeof editSchoolAdminSchema>;
@@ -43,6 +49,7 @@ export type SchoolAdminFormValues =
 
 export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const form = useForm<SchoolAdminFormValues>({
     resolver: zodResolver(
@@ -54,9 +61,17 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
     },
   });
 
+  const governorate = form.watch("governorate_id");
+
   const { AddEditMutation, AddEditLoading } = useAddEditSchoolAdmin(adminId);
 
+  const { data: governoratesData, isLoading: governoratesLoading } =
+    useGetGovernorates();
+
   const { data, isLoading } = useGetSchoolAdmin(adminId);
+
+  const { data: schools, isLoading: schoolsLoading } =
+    useGetSchoolsByGovernorate();
 
   function onSubmit(values: SchoolAdminFormValues) {
     // Merge first_name, second_name, third_name, and fourth_name into a single name
@@ -111,11 +126,31 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
       form.setValue("admin_permissions", data.admin_permissions);
       form.setValue("national_id", data.user.national_id);
       form.setValue("phone", data.user.phone);
+      form.setValue("governorate_id", data.school.governorate_id);
     }
   }, [data]);
 
-  if (isLoading) {
-    return <Loader2Icon className="animate-spin" />;
+  useEffect(() => {
+    if (schools?.data && data?.school_id) {
+      const exists = schools.data.some(
+        (s) => String(s.id) === String(data.school_id)
+      );
+      if (exists) {
+        form.setValue("school_id", String(data.school_id));
+      }
+    }
+  }, [schools, data]);
+
+  useEffect(() => {
+    if (governorate) {
+      router.replace(pathname + `?governorate_id=${governorate}`, {
+        scroll: false,
+      });
+    }
+  }, [governorate]);
+
+  if (isLoading && governoratesLoading) {
+    return <Loader />;
   }
 
   return (
@@ -241,6 +276,36 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
           )}
         />
 
+        {/* governorate_id */}
+        <FormField
+          control={form.control}
+          name="governorate_id"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>المحافظة</FormLabel>
+              <Select
+                dir="rtl"
+                {...field}
+                onValueChange={field.onChange}
+                value={String(field.value)}
+                disabled={governoratesLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="اختر المحافظة" />
+                </SelectTrigger>
+                <SelectContent>
+                  {governoratesData?.map((gov) => (
+                    <SelectItem key={gov.id} value={String(gov.id)}>
+                      {gov.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {/* school */}
         <FormField
           control={form.control}
@@ -248,14 +313,20 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>المدرسة</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                dir="rtl"
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="اختر المدرسة" />
                 </SelectTrigger>
                 <SelectContent>
-                  {/* هنا تضيف المدارس من الـ API */}
-                  <SelectItem value="1">مدرسة 1</SelectItem>
-                  <SelectItem value="2">مدرسة 2</SelectItem>
+                  {schools?.data.map((school) => (
+                    <SelectItem key={school.id} value={String(school.id)}>
+                      {school.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <FormMessage />

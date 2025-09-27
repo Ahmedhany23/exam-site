@@ -29,6 +29,10 @@ const baseSchoolAdminSchema = z.object({
       }, {} as Record<(typeof adminPermissionsKeys)[number], z.ZodTypeAny>)
     )
     .optional(),
+  governorate_id: z
+    .number({ message: "المحافظة مطلوبة" })
+    .or(z.string())
+    .nullable(),
 });
 
 export const addSchoolAdminSchema = baseSchoolAdminSchema

@@ -78,12 +78,3 @@ export const editTeacherSchema = baseTeacherSchema
     }
   );
 
-export const teacherSchema = baseTeacherSchema
-  .extend({
-    password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
-    password_confirmation: z.string().min(8, "تأكيد كلمة المرور مطلوب"),
-  })
-  .refine((data) => data.password === data.password_confirmation, {
-    message: "كلمة المرور وتأكيدها غير متطابقين",
-    path: ["password_confirmation"],
-  });

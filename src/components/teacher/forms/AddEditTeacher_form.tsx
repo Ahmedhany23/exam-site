@@ -25,114 +25,17 @@ import {
 } from "@/src/components/ui/select";
 import { useAddEditTeacher, useGetTeacher } from "../hooks/useTeacherApi";
 import { FormError } from "@/src/lib/FormError";
-import {
-  addTeacherSchema,
-  editTeacherSchema,
-  teacherSchema,
-} from "../schema/TeacherSchema";
+import { addTeacherSchema, editTeacherSchema } from "../schema/TeacherSchema";
 import { useGetSubjects } from "../../subjects/hooks/useSubjectsApi";
+import SelectField from "../../fields/SelectField";
+import CheckboxField from "../../fields/CheckboxField";
+import TextField from "../../fields/TextField";
+import { Loader } from "../../ui/loader";
 
 // ================= Schema Types =================
 type AddTeacherFormValues = z.infer<typeof addTeacherSchema>;
 type EditTeacherFormValues = z.infer<typeof editTeacherSchema>;
 export type TeacherFormValues = AddTeacherFormValues | EditTeacherFormValues;
-
-// ================= Helper Components =================
-function TextField({
-  form,
-  name,
-  label,
-  type = "text",
-  placeholder,
-}: {
-  form: any;
-  name: keyof TeacherFormValues;
-  label: string;
-  type?: string;
-  placeholder?: string;
-}) {
-  return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input type={type} placeholder={placeholder} {...field} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-}
-
-function SelectField({
-  form,
-  name,
-  label,
-  placeholder,
-  options,
-}: {
-  form: any;
-  name: keyof TeacherFormValues;
-  label: string;
-  placeholder: string;
-  options: { value: string; label: string }[];
-}) {
-  return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {options.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value}>
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-}
-
-function CheckboxField({
-  form,
-  name,
-  label,
-}: {
-  form: any;
-  name: keyof TeacherFormValues;
-  label: string;
-}) {
-  return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className="flex items-center space-x-2 space-x-reverse">
-          <FormControl>
-            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
-          </FormControl>
-          <FormLabel className="cursor-pointer">{label}</FormLabel>
-        </FormItem>
-      )}
-    />
-  );
-}
 
 // ================= Main Form =================
 export function AddEditTeacher_form() {
@@ -142,9 +45,9 @@ export function AddEditTeacher_form() {
 
   const { AddEditMutation, AddEditLoading } = useAddEditTeacher(teacherId);
 
-  const { data: subjects } = useGetSubjects();
+  const { data: subjects , isLoading: subjectsLoading } = useGetSubjects();
 
-  const { data: teacher, isLoading } = useGetTeacher(teacherId);
+  const { data: teacher, isLoading : teacherLoading } = useGetTeacher(teacherId);
 
   const form = useForm<TeacherFormValues>({
     resolver: zodResolver(teacherId ? editTeacherSchema : addTeacherSchema),
@@ -191,30 +94,29 @@ export function AddEditTeacher_form() {
 
   useEffect(() => {
     if (teacher) {
-      if (teacher?.data?.name) {
+      if (teacher?.name) {
         const [first_name, second_name, third_name, fourth_name] =
-          teacher?.data?.name.split(" ");
+          teacher?.name.split(" ");
 
         form.setValue("first_name", first_name);
         form.setValue("second_name", second_name);
         form.setValue("third_name", third_name);
         form.setValue("fourth_name", fourth_name);
       }
-
-      form.setValue("email", teacher?.data?.email);
-      form.setValue("phone", teacher?.data?.phone);
-      form.setValue("national_id", teacher?.data?.national_id);
-      form.setValue("subject_id", teacher?.data?.subject_id);
-      form.setValue("teacher_type", teacher?.data?.teacher_type);
-      form.setValue("can_create_exams", teacher?.data?.can_create_exams);
-      form.setValue("can_correct_essays", teacher?.data?.can_correct_essays);
-      form.setValue("is_active", teacher?.data?.is_active);
-      form.setValue("school_ids", teacher?.data?.school_ids);
-      form.setValue("assignment_type", teacher?.data?.assignment_type);
+      form.setValue("email", teacher?.email);
+      form.setValue("phone", teacher?.phone);
+      form.setValue("national_id", teacher?.national_id);
+      form.setValue("subject_id", String(teacher.subject_id));
+      form.setValue("teacher_type", teacher?.teacher_type);
+      form.setValue("can_create_exams", teacher?.can_create_exams);
+      form.setValue("can_correct_essays", teacher?.can_correct_essays);
+      form.setValue("is_active", teacher?.is_active);
+      form.setValue("school_ids", teacher?.schools.map((s) => String(s.id)) || []);
+      form.setValue("assignment_type", teacher?.assignment_type);
     }
   }, [teacher]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (subjectsLoading && teacherLoading) return <Loader/>;
 
   return (
     <div className="container mx-auto py-6">

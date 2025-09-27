@@ -1,4 +1,5 @@
 import axiosInstance from "@/src/lib/axios";
+import { SchoolAdmin } from "@/src/types/types";
 import {
   keepPreviousData,
   useMutation,
@@ -7,8 +8,18 @@ import {
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
+type SchoolAdminResponse = {
+  data: SchoolAdmin[];
+  meta: {
+    total: number;
+    per_page: number;
+    current_page: number;
+    total_pages: number;
+  };
+};
+
 export const useGetSchoolAdmins = (page: number, pageSize: number) => {
-  return useQuery({
+  return useQuery<SchoolAdminResponse>({
     queryKey: ["school-admin", page, pageSize],
     queryFn: async () => {
       const res = await axiosInstance.get("/v1/admin/school-admins", {
@@ -22,7 +33,7 @@ export const useGetSchoolAdmins = (page: number, pageSize: number) => {
 };
 
 export const useGetSchoolAdmin = (adminId: string) => {
-  return useQuery({
+  return useQuery<SchoolAdmin>({
     queryKey: ["school-admin", adminId],
     queryFn: async () => {
       const res = await axiosInstance

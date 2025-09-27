@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/src/components/ui/input";
@@ -19,31 +19,56 @@ import {
   SelectContent,
   SelectItem,
 } from "@/src/components/ui/select";
-import { AddEditStudentSchema } from "../schema/StudentSchema";
+
 import z from "zod";
-import { useAddEditStudent } from "../hook/useStudentsApis";
+import { useAddEditStudent, useGetStudent } from "../hook/useStudentsApis";
 import { Loader2Icon } from "lucide-react";
 import { FormError } from "@/src/lib/FormError";
 import { useRouter } from "next/navigation";
-
-type FormValues = z.infer<typeof AddEditStudentSchema>;
+import { addStudentSchema, editStudentSchema } from "../schema/StudentSchema";
 
 type Props = {
   studentId: string;
 };
+
+// ================= Schema Types =================
+type AddStudentFormValues = z.infer<typeof addStudentSchema>;
+type EditStudentFormValues = z.infer<typeof editStudentSchema>;
+export type StudentFormValues = AddStudentFormValues | EditStudentFormValues;
+
 export const AddEditStudent_form = ({ studentId }: Props) => {
   const router = useRouter();
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(AddEditStudentSchema),
-    defaultValues: {
-      is_active: true,
-    },
+  const form = useForm<StudentFormValues>({
+    resolver: zodResolver(studentId ? editStudentSchema : addStudentSchema),
   });
 
   const { AddEditMutation, AddEditLoading } = useAddEditStudent(studentId);
 
-  function onSubmit(values: FormValues) {
+  const { data: student, isLoading } = useGetStudent(studentId);
+
+  useEffect(() => {
+    if (student) {
+      // Split the full name into parts
+      const nameParts = student.name.split(" ");
+
+      form.reset({
+        first_name: nameParts[0] || "",
+        second_name: nameParts[1] || "",
+        third_name: nameParts[2] || "",
+        fourth_name: nameParts[3] || "",
+        email: student.email,
+        phone: student.phone,
+        national_id: student.national_id,
+        academic_year: student.academic_year,
+        section: student.section,
+        birth_date: student.birth_date ? student.birth_date.split("T")[0] : "",
+        gender: student.gender,
+        guardian_phone: student.guardian_phone,
+      });
+    }
+  }, [student]);
+  function onSubmit(values: StudentFormValues) {
     // Merge first_name, second_name, third_name, and fourth_name into a single name
     const fullName = [
       values.first_name,
@@ -75,7 +100,7 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
         form.reset();
         router.back();
       })
-      .catch((err) => FormError<FormValues>(err, form));
+      .catch((err) => FormError<StudentFormValues>(err, form));
   }
 
   return (
@@ -195,7 +220,12 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>الصف الدراسي</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                dir="rtl"
+                {...field}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="اختر الصف الدراسي" />
                 </SelectTrigger>
@@ -217,7 +247,12 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>الشعبة</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                dir="rtl"
+                {...field}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="اختر الشعبة" />
                 </SelectTrigger>
@@ -239,7 +274,12 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>الجنس</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                dir="rtl"
+                {...field}
+                onValueChange={field.onChange}
+                value={field.value}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="اختر الجنس" />
                 </SelectTrigger>
@@ -260,7 +300,7 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>تاريخ الميلاد</FormLabel>
-              <Input type="date" {...field} />
+              <Input dir="rtl" type="date" {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -291,23 +331,6 @@ export const AddEditStudent_form = ({ studentId }: Props) => {
             </FormItem>
           )}
         />
-
-        {/* Status */}
-        <div className="md:col-span-2 lg:col-span-4 flex items-center space-x-2">
-          <FormField
-            control={form.control}
-            name="is_active"
-            render={({ field }) => (
-              <FormItem className="flex items-center space-x-2">
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-                <FormLabel>نشط</FormLabel>
-              </FormItem>
-            )}
-          />
-        </div>
 
         {/* Submit Button */}
         <div className="md:col-span-2 lg:col-span-4">

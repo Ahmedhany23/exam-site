@@ -44,7 +44,17 @@ export function Login_form() {
   const { loginMutation, loginLoading } = useAuthLogin();
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    loginMutation(values);
+    let payload: Record<string, string> = { password: values.password };
+
+    if (/^\S+@\S+\.\S+$/.test(values.identifier)) {
+      payload.email = values.identifier;
+    } else if (/^\d{10,15}$/.test(values.identifier)) {
+      payload.phone = values.identifier;
+    } else if (/^\d{14}$/.test(values.identifier)) {
+      payload.national_id = values.identifier;
+    }
+
+    loginMutation(payload);
   };
 
   return (

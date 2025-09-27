@@ -15,6 +15,7 @@ import { useGetSubjects } from "../../subjects/hooks/useSubjectsApi";
 import { useAddorEditExam, useGetExam } from "../hooks/useExamApi";
 import { ExamFormValues, ExamSchema } from "../schemas/ExamSchema";
 import { useEffect } from "react";
+import { Loader } from "../../ui/loader";
 
 export const AddEditExam_form = () => {
   const router = useRouter();
@@ -71,7 +72,7 @@ export const AddEditExam_form = () => {
   }, [exam]);
 
   if (subjectsLoading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   return (

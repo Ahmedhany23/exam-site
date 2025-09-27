@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { AddEditSchoolAdmin_form } from "./forms/AddEditSchoolAdmin_form";
 import { useParams } from "next/navigation";
 
@@ -19,7 +19,9 @@ export const AddEditSchoolAdminComponent = () => {
             : "أدخل بيانات المدير الجديد"}
         </p>
       </div>
-      <AddEditSchoolAdmin_form adminId={adminId} />
+      <Suspense>
+        <AddEditSchoolAdmin_form adminId={adminId} />
+      </Suspense>
     </div>
   );
 };

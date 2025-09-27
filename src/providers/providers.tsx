@@ -21,15 +21,13 @@ export function Providers({ children, user }: props) {
           queries: {
             retry: false,
             refetchOnWindowFocus: false,
-            staleTime: Infinity,
+            gcTime: 0,
           },
         },
       })
   );
-  
 
   const setUser = useUserStore((state) => state.setUser);
-
 
   useLayoutEffect(() => {
     setUser(user?.data || null);

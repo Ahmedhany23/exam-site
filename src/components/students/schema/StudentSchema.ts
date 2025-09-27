@@ -1,7 +1,7 @@
 // schema.ts
 import { z } from "zod";
 
-export const AddEditStudentSchema = z
+ const baseStudentSchema = z
   .object({
     first_name: z.string().min(1, "الاسم الأول مطلوب").max(50),
     second_name: z.string().min(1, "الاسم الثاني مطلوب").max(50),
@@ -13,11 +13,6 @@ export const AddEditStudentSchema = z
       .string()
       .length(14, "الرقم القومي يجب أن يكون 14 رقم")
       .regex(/^\d+$/, "الرقم القومي يجب أن يحتوي على أرقام فقط"),
-    password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
-    password_confirmation: z
-      .string()
-      .min(8, "تأكيد كلمة المرور يجب أن يكون 8 أحرف على الأقل"),
-    is_active: z.boolean().optional(),
     academic_year: z.string().min(1, "الصف الدراسي مطلوب"),
     birth_date: z
       .string()
@@ -36,9 +31,42 @@ export const AddEditStudentSchema = z
     guardian_phone: z.string().min(1, "رقم هاتف ولي الأمر مطلوب"),
     section: z.string().min(1, "الشعبة مطلوبة"),
   })
-  .refine((data) => data.password === data.password_confirmation, {
-    message: "كلمتا المرور غير متطابقتين",
-    path: ["password_confirmation"],
-  });
 
-export type AddEditStudentSchemaType = z.infer<typeof AddEditStudentSchema>;
+
+
+  export const addStudentSchema = baseStudentSchema
+    .extend({
+      password: z.string().min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل"),
+      password_confirmation: z.string().min(8, "تأكيد كلمة المرور مطلوب"),
+    })
+    .refine((data) => data.password === data.password_confirmation, {
+      message: "كلمة المرور وتأكيدها غير متطابقين",
+      path: ["password_confirmation"],
+    });
+  
+  export const editStudentSchema = baseStudentSchema
+    .extend({
+      password: z
+        .string()
+        .min(8, "كلمة المرور يجب أن تكون 8 أحرف على الأقل")
+        .optional()
+        .or(z.literal("")),
+      password_confirmation: z.string().optional().or(z.literal("")),
+    })
+    .refine(
+      (data) => {
+        if (data.password && data.password.trim() !== "") {
+          return data.password === data.password_confirmation;
+        }
+        return true;
+      },
+      {
+        message: "كلمة المرور وتأكيدها غير متطابقين",
+        path: ["password_confirmation"],
+      }
+    );
+  
+  
+
+
+

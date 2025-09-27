@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { userType } from "../types/types";
-import axiosInstance from "@/src/lib/axios";
+import axiosInstance from "../lib/axios";
 
 export type responseUserType = {
   success: boolean;
@@ -24,7 +24,7 @@ export const useGetUser = async (): Promise<responseUserType | null> => {
     });
 
     return response.data;
-  } catch {
+  } catch (error) {
     return null;
   }
 };
