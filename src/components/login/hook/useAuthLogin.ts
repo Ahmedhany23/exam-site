@@ -1,8 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axiosInstance from "@/src/lib/axios";
-import { formSchema } from "../form/Login_form";
-import * as z from "zod";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
@@ -14,11 +12,26 @@ export const useAuthLogin = () => {
     isPending: loginLoading,
     error,
   } = useMutation({
-    mutationFn: (values: object) =>
-      axiosInstance.post("/v1/auth/login", values),
+    mutationFn: async (values: Record<string, any>) => {
+
+      // Ensure CSRF cookie is set (if using Laravel Sanctum)
+      try {
+        await axiosInstance.get("/sanctum/csrf-cookie");
+      } catch (err) {
+        console.warn(
+          "CSRF cookie fetch skipped or failed (maybe using tokens)."
+        );
+      }
+
+      // Perform login request
+      return axiosInstance.post("/v1/auth/login", values, {
+        withCredentials: true, 
+      });
+    },
 
     onSuccess: ({ data }) => {
       try {
+        // Extract token, expiry, and user type from response
         const token = data?.data?.access_token;
         const expiresAt = data?.data?.expires_at;
         const userType = data?.data?.user?.user_type;
@@ -46,7 +59,7 @@ export const useAuthLogin = () => {
     },
 
     onError: (err: any) => {
-      toast.error(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message || "فشل تسجيل الدخول");
     },
   });
 

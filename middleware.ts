@@ -28,6 +28,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+
   // Redirect root path to dashboard
   if (pathname === "/" && token) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
