@@ -19,6 +19,22 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/logo.png",
   },
+  openGraph: {
+    title: "Exam Site - Digitopia",
+    description: "Login to your account and access exams online.",
+    url: "/images/logo.png",
+    siteName: "Exam Site",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Exam Site Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default async function RootLayout({
@@ -27,8 +43,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user: responseUserType | null = await useGetUser();
-
-
 
   return (
     <html lang="ar" dir="rtl">
