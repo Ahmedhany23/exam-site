@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Student } from "@/src/types/types";
+import { useSearchParams } from "next/navigation";
 
 type StudentDataResponse = {
   data: Student[];
@@ -19,11 +20,16 @@ type StudentDataResponse = {
 };
 
 export const useGetStudents = (page: number, pageSize: number) => {
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("search") || "";
+    const academicYear = searchParams.get("academic_year") || "";
+
   return useQuery<StudentDataResponse>({
-    queryKey: ["students", page, pageSize],
+    queryKey: ["students", page, pageSize , search, academicYear],
     queryFn: async () => {
       const res = await axiosInstance.get("/v1/admin/students", {
-        params: { page, per_page: pageSize },
+        params: { page, per_page: pageSize , search , academic_year: academicYear },
       });
       return res.data;
     },

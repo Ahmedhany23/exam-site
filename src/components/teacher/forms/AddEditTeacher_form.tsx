@@ -1,36 +1,22 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { Button } from "@/src/components/ui/button";
+import {
+  Form
+} from "@/src/components/ui/form";
+import { FormError } from "@/src/lib/FormError";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/src/components/ui/form";
-import { Input } from "@/src/components/ui/input";
-import { Button } from "@/src/components/ui/button";
-import { Checkbox } from "@/src/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select";
-import { useAddEditTeacher, useGetTeacher } from "../hooks/useTeacherApi";
-import { FormError } from "@/src/lib/FormError";
-import { addTeacherSchema, editTeacherSchema } from "../schema/TeacherSchema";
-import { useGetSubjects } from "../../subjects/hooks/useSubjectsApi";
-import SelectField from "../../fields/SelectField";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import CheckboxField from "../../fields/CheckboxField";
+import SelectField from "../../fields/SelectField";
 import TextField from "../../fields/TextField";
+import { useGetSubjects } from "../../subjects/hooks/useSubjectsApi";
 import { Loader } from "../../ui/loader";
+import { useAddEditTeacher, useGetTeacher } from "../hooks/useTeacherApi";
+import { addTeacherSchema, editTeacherSchema } from "../schema/TeacherSchema";
 
 // ================= Schema Types =================
 type AddTeacherFormValues = z.infer<typeof addTeacherSchema>;

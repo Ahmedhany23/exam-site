@@ -23,7 +23,7 @@ type TeacherDataResponse = {
   };
 };
 
-export const useGetTeachers = (page: number, pageSize: number) => {
+export const useGetTeachers = (page?: number, pageSize?: number) => {
   return useQuery<TeacherDataResponse>({
     queryKey: ["teachers", page, pageSize],
     queryFn: async () => {

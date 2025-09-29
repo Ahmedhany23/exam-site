@@ -19,11 +19,7 @@ import { usePathname } from "next/navigation";
 import * as React from "react";
 
 import { useAuthLogout } from "@/src/actions/useAuthLogout";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/src/components/ui/avatar";
+import { Avatar } from "@/src/components/ui/avatar";
 import { Button } from "@/src/components/ui/button";
 import {
   DropdownMenu,
@@ -35,6 +31,8 @@ import {
 } from "@/src/components/ui/dropdown-menu";
 import { useUserStore } from "@/src/hooks/useUserStore";
 import Image from "next/image";
+
+import { motion } from "framer-motion";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -50,10 +48,16 @@ export function DashboardLayout({ children }: LayoutProps) {
 
   const navItemsMemo = React.useMemo(
     () => [
-      { href: "/dashboard", label: "الرئيسية", icon: Home, permission: true },
+      { href: "/home", label: "الرئيسية", icon: Home, permission: true },
       {
         href: "/teacher",
         label: "المدرسين",
+        icon: Users,
+        permission: user?.user_type === "ministry_admin",
+      },
+      {
+        href: "/teacher-school-assignment",
+        label: "توزيع المعلمين على المدارس",
         icon: Users,
         permission: user?.user_type === "ministry_admin",
       },
@@ -73,7 +77,7 @@ export function DashboardLayout({ children }: LayoutProps) {
         href: "/students",
         label: "الطلاب",
         icon: Users,
-        permission: user?.user_type === "school_admin" || user?.user_type === "ministry_admin",
+        permission: user?.user_type === "school_admin",
       },
       {
         href: "/school-admins",
@@ -85,7 +89,8 @@ export function DashboardLayout({ children }: LayoutProps) {
         href: "/exams",
         label: " الامتحانات",
         icon: Book,
-        permission: user?.user_type === "teacher" || user?.user_type === "ministry_admin",
+        permission:
+          user?.user_type === "teacher" || user?.user_type === "ministry_admin",
       },
       { href: "/profile", label: "الملف الشخصي", icon: User, permission: true },
     ],
@@ -133,39 +138,46 @@ export function DashboardLayout({ children }: LayoutProps) {
 
         {/* Navigation */}
         <nav className="flex  flex-col gap-1 p-4 sticky top-0 ">
-          {navItemsMemo.map(({ href, label, icon: Icon, permission }) => {
-            const isActive = pathname.startsWith(href);
+          {navItemsMemo.map(({ href, label, icon: Icon, permission }, i) => {
+            const isActive =
+              pathname === href || pathname.startsWith(`${href}/`);
 
             if (!permission) {
               return null;
             }
 
             return (
-              <Link
+              <motion.div
                 key={href}
-                href={href}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`
-                  group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200
-                   ${
-                     isActive
-                       ? "bg-blue-50 text-blue-600 shadow-sm"
-                       : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                   }
-                `}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
               >
-                <Icon
-                  className={`h-5 w-5 transition-colors ${
-                    isActive
-                      ? "text-blue-500"
-                      : "text-gray-400 group-hover:text-slate-600"
-                  }`}
-                />
-                <span className="font-medium">{label}</span>
-                {isActive && (
-                  <div className="mr-auto h-2 w-2 rounded-full bg-blue-400"></div>
-                )}
-              </Link>
+                <Link
+                  href={href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`
+            group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200
+            ${
+              isActive
+                ? "bg-blue-50 text-blue-600 shadow-sm"
+                : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+            }
+          `}
+                >
+                  <Icon
+                    className={`h-5 w-5 transition-colors ${
+                      isActive
+                        ? "text-blue-500"
+                        : "text-gray-400 group-hover:text-slate-600"
+                    }`}
+                  />
+                  <span className="font-medium">{label}</span>
+                  {isActive && (
+                    <div className="mr-auto h-2 w-2 rounded-full bg-blue-400"></div>
+                  )}
+                </Link>
+              </motion.div>
             );
           })}
         </nav>
@@ -205,13 +217,9 @@ export function DashboardLayout({ children }: LayoutProps) {
                       <div className="text-xs text-gray-500">{user?.email}</div>
                     </div>
                     <Avatar className="h-9 w-9 shadow-sm">
-                      <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="صورة المستخدم"
-                      />
-                      <AvatarFallback className="bg-gradient-to-r from-blue-100 to-purple-100 text-slate-700 font-bold">
-                        م
-                      </AvatarFallback>
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-r from-blue-100 to-purple-100 text-slate-700 font-bold">
+                        <User className="h-9 w-9" />
+                      </div>
                     </Avatar>
                     <ChevronDown className="h-4 w-4 text-gray-400" />
                   </Button>
@@ -237,10 +245,6 @@ export function DashboardLayout({ children }: LayoutProps) {
                       الملف الشخصي
                     </Link>
                   </DropdownMenuItem>
-                  {/*     <DropdownMenuItem className="cursor-pointer text-right">
-                    <Settings className="ml-2 h-4 w-4" />
-                    الإعدادات
-                  </DropdownMenuItem> */}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={logout}

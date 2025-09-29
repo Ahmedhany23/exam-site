@@ -24,6 +24,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { Input } from "../ui/input";
 
 export type Column<T> = {
   key: keyof T;
@@ -42,8 +43,9 @@ interface DataTableProps<T> {
   pageSizeOptions?: number[];
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
-  title?: string;
-  description?: string;
+  search?: string;
+  onSearchChange?: (value: string) => void;
+  extraFilters?: React.ReactNode;
 }
 
 export function DataTable<T>({
@@ -56,8 +58,9 @@ export function DataTable<T>({
   pageSizeOptions = [5, 10, 20, 50],
   onPageChange,
   onPageSizeChange,
-  title,
-  description,
+  search = "",
+  onSearchChange,
+  extraFilters,
 }: DataTableProps<T>) {
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const hasData = data.length > 0;
@@ -73,19 +76,18 @@ export function DataTable<T>({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      {(title || description) && (
-        <div className="space-y-1">
-          {title && (
-            <h2 className="text-xl font-semibold tracking-tight text-foreground">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className="text-sm text-muted-foreground">{description}</p>
-          )}
-        </div>
-      )}
+      <div className="flex items-center gap-2 w-full sm:w-auto">
+        {onSearchChange && (
+          <input
+            type="text"
+            placeholder="ابحث..."
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            className="w-full sm:w-64 border rounded-md px-3 py-2 text-sm"
+          />
+        )}
+        {extraFilters}
+      </div>
 
       {/* Card wrapper */}
       <div className="rounded-xl border bg-card shadow-md dark:shadow-lg transition-shadow hover:shadow-lg dark:hover:shadow-xl overflow-hidden">

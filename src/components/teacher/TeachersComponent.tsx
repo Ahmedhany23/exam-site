@@ -8,7 +8,7 @@ import {
   useGetTeachers,
   useToggleTeacherStatus,
 } from "./hooks/useTeacherApi";
-import { Column, DataTable } from "@/src/tools/Tables/DataTable";
+import { Column, DataTable } from "@/src/components/tables/DataTable";
 import { Teacher } from "@/src/types/types";
 import {
   AlertDialog,
@@ -40,6 +40,12 @@ export const TeachersComponent = () => {
     { key: "id", header: "ID", align: "right" },
     { key: "name", header: "الاسم", align: "right" },
     { key: "email", header: "البريد", align: "right" },
+    {
+      key: "schools",
+      header: "المدارس",
+      align: "right",
+      render: (row) => row.schools.map((school) => school.name).join(", "),
+    },
     {
       key: "actions",
       header: "إجراءات",

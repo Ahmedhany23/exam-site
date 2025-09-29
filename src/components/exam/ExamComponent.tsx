@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useDeleteExam, useGetExams } from "./hooks/useExamApi";
-import { Column, DataTable } from "@/src/tools/Tables/DataTable";
+import { Column, DataTable } from "@/src/components/tables/DataTable";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";

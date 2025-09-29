@@ -198,22 +198,28 @@ export const ExamDetailsComponent = () => {
                 </CardHeader>
                 <CardContent>
                   {section.questions && section.questions.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       {section.questions.map((q, qIndex) => (
                         <div
                           key={q.id}
-                          className="p-3 rounded border border-gray-200 bg-gray-50"
+                          className="p-4 rounded-lg border border-gray-200 bg-gray-50"
                         >
                           <div className="flex items-start gap-3">
-                            <span className="text-xs font-bold text-gray-600 min-w-[24px]">
+                            <span className="text-sm font-bold text-gray-700 min-w-[24px]">
                               {qIndex + 1}-
                             </span>
-                            <div className="flex-1 space-y-2">
-                              <p className="text-sm leading-relaxed text-gray-800">
+                            <div className="flex-1 space-y-3">
+                              <p className="text-base leading-relaxed text-gray-900">
                                 {q.question_text}
                               </p>
-                              <div className="flex items-center gap-3 text-sm w-full justify-end my-4">
-                                <Button asChild size={"sm"}>
+
+                              {/* Question Actions */}
+                              <div className="flex flex-wrap items-center gap-3 justify-end mt-3">
+                                <Button
+                                  asChild
+                                  size="sm"
+                                  className="min-h-[36px]"
+                                >
                                   <Link
                                     href={`/exams/${examId}/sections/${section.id}/questions/${q.id}/edit`}
                                   >
@@ -223,7 +229,11 @@ export const ExamDetailsComponent = () => {
 
                                 <AlertDialog>
                                   <AlertDialogTrigger asChild>
-                                    <Button size="sm" variant="destructive">
+                                    <Button
+                                      size="sm"
+                                      variant="destructive"
+                                      className="min-h-[36px]"
+                                    >
                                       حذف
                                     </Button>
                                   </AlertDialogTrigger>
@@ -246,7 +256,7 @@ export const ExamDetailsComponent = () => {
                                         onClick={async () =>
                                           await deleteExamQuestionMutation(q.id)
                                         }
-                                        className="bg-red-600 hover:bg-red-600 text-center"
+                                        className="bg-red-600 hover:bg-red-700 text-center focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                                         disabled={deleteLoading}
                                       >
                                         {deleteLoading ? (
@@ -261,14 +271,15 @@ export const ExamDetailsComponent = () => {
                                 </AlertDialog>
                               </div>
 
+                              {/* Options */}
                               {q.options && q.options.length > 0 && (
-                                <div className="mt-2 space-y-1 pl-3 border-l border-gray-300">
+                                <div className="mt-2 space-y-2 pl-3 border-l-2 border-gray-300">
                                   {q.options.map((option, optIndex) => (
                                     <div
                                       key={optIndex}
-                                      className="flex items-center gap-2 text-xs text-gray-700"
+                                      className="flex items-center gap-2 text-sm text-gray-800"
                                     >
-                                      <span className="w-5 h-5 rounded-full border border-gray-400 flex items-center justify-center text-[10px] font-medium">
+                                      <span className="w-6 h-6 rounded-full border border-gray-400 flex items-center justify-center text-[11px] font-medium">
                                         {String.fromCharCode(65 + optIndex)}
                                       </span>
                                       <span>{option}</span>
@@ -277,13 +288,14 @@ export const ExamDetailsComponent = () => {
                                 </div>
                               )}
 
+                              {/* Help text */}
                               {q.help_text && (
-                                <p className="text-xs text-gray-600 italic pl-3 border-l border-yellow-400">
+                                <p className="text-sm text-gray-700 italic pl-3 border-l-2 border-yellow-400">
                                   💡 {q.help_text}
                                 </p>
                               )}
                             </div>
-                            <span className="px-2 py-1 text-xs font-bold bg-gray-200 text-gray-800 rounded">
+                            <span className="px-2 py-1 text-sm font-bold bg-gray-200 text-gray-800 rounded">
                               {q.points} د
                             </span>
                           </div>
@@ -291,7 +303,7 @@ export const ExamDetailsComponent = () => {
                       ))}
                     </div>
                   ) : (
-                    <p className="py-6 text-center text-sm text-gray-500">
+                    <p className="py-8 text-center text-base text-gray-500">
                       لا يوجد أسئلة في هذا الجزء
                     </p>
                   )}

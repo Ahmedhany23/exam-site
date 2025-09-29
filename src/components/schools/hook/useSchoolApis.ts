@@ -1,3 +1,4 @@
+"use client";
 import axiosInstance from "@/src/lib/axios";
 import { School } from "@/src/types/types";
 import {
@@ -18,7 +19,7 @@ type SchoolResponse = {
   };
 };
 
-export const useGetSchools = (page: number, pageSize: number) => {
+export const useGetSchools = (page?: number, pageSize?: number) => {
   return useQuery<SchoolResponse>({
     queryKey: ["school", page, pageSize],
     queryFn: async () => {

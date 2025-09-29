@@ -4,7 +4,7 @@ import { Button } from "@/src/components/ui/button";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
-import { Column, DataTable } from "@/src/tools/Tables/DataTable";
+import { Column, DataTable } from "@/src/components/tables/DataTable";
 import { Student } from "@/src/types/types";
 import {
   AlertDialog,
@@ -19,27 +19,58 @@ import {
 } from "@/src/components/ui/alert-dialog";
 import { useDeleteStudent, useGetStudents } from "./hook/useStudentsApis";
 import { useUserStore } from "@/src/hooks/useUserStore";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export const StudentsComponent = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("search") || "";
+  const academicYear = searchParams.get("academic_year") || "";
+
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  // hooks
   const { deleteStudentMutation, deleteStudentLoading } = useDeleteStudent();
   const { data, isLoading, error } = useGetStudents(page, pageSize);
 
   const students = data?.data ?? [];
   const total = data?.meta.total ?? 0;
 
+  // user
   const user = useUserStore((state) => state.user);
 
+  // permission
   const isSchoolAdmin = user?.user_type === "school_admin";
 
+  // columns
   const columns: Column<Student>[] = [
     { key: "id", header: "ID", align: "right" },
     { key: "name", header: "الاسم", align: "right" },
     { key: "email", header: "البريد", align: "right" },
     { key: "phone", header: "الهاتف", align: "right" },
     { key: "national_id", header: "الرقم القومي", align: "right" },
+    {
+      key: "academic_year",
+      header: "السنة الدراسية",
+      align: "right",
+      render: (row) =>
+        `${
+          row.academic_year === "first"
+            ? "السنة الاولى"
+            : row.academic_year === "second"
+            ? "السنة الثانية"
+            : "السنة الثالثة"
+        }`,
+    },
     { key: "student_code", header: "كود الطالب", align: "right" },
 
     {
@@ -88,6 +119,25 @@ export const StudentsComponent = () => {
     },
   ];
 
+  // filters
+  const handleAcademicYearChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "all") params.delete("academic_year");
+    else if (value) params.set("academic_year", value);
+    else params.delete("academic_year");
+    router.push(`?${params.toString()}`);
+  };
+
+  const handleSearchChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set("search", value);
+    } else {
+      params.delete("search");
+    }
+    router.push(`?${params.toString()}`);
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -117,6 +167,25 @@ export const StudentsComponent = () => {
           total={total}
           onPageChange={setPage}
           onPageSizeChange={setPageSize}
+          search={search}
+          onSearchChange={handleSearchChange}
+          extraFilters={
+            <Select
+              dir="rtl"
+              value={academicYear}
+              onValueChange={handleAcademicYearChange}
+            >
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="اختر السنة" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">الكل</SelectItem>
+                <SelectItem value="first">السنة الأولى</SelectItem>
+                <SelectItem value="second">السنة الثانية</SelectItem>
+                <SelectItem value="third">السنة الثالثة</SelectItem>
+              </SelectContent>
+            </Select>
+          }
         />
       )}
     </div>

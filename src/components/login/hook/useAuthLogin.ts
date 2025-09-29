@@ -1,8 +1,8 @@
-import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import axiosInstance from "@/src/lib/axios";
-import toast from "react-hot-toast";
+import { useMutation } from "@tanstack/react-query";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export const useAuthLogin = () => {
   const router = useRouter();
@@ -12,29 +12,19 @@ export const useAuthLogin = () => {
     isPending: loginLoading,
     error,
   } = useMutation({
-    mutationFn: async (values: Record<string, any>) => {
-
-      // Ensure CSRF cookie is set (if using Laravel Sanctum)
-      try {
-        await axiosInstance.get("/sanctum/csrf-cookie");
-      } catch (err) {
-        console.warn(
-          "CSRF cookie fetch skipped or failed (maybe using tokens)."
-        );
-      }
-
-      // Perform login request
-      return axiosInstance.post("/v1/auth/login", values, {
-        withCredentials: true, 
-      });
-    },
+    mutationFn: (values: object) =>
+      axiosInstance.post("/v1/auth/login", values),
 
     onSuccess: ({ data }) => {
       try {
-        // Extract token, expiry, and user type from response
         const token = data?.data?.access_token;
         const expiresAt = data?.data?.expires_at;
         const userType = data?.data?.user?.user_type;
+
+        if (userType === "student") {
+          toast.error("هذا الحساب غير صالح للدخول 👨‍🎓");
+          return;
+        }
 
         if (token && expiresAt && userType) {
           const expiresDate = new Date(expiresAt);
@@ -51,7 +41,7 @@ export const useAuthLogin = () => {
         }
 
         toast.success("تم تسجيل الدخول بنجاح 🎉");
-        router.push("/dashboard", { scroll: false });
+        router.push("/home", { scroll: false });
         router.refresh();
       } catch (err) {
         toast.error("حصل خطأ أثناء حفظ بيانات الدخول");

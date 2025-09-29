@@ -15,7 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/src/components/ui/alert-dialog";
-import { Column, DataTable } from "@/src/tools/Tables/DataTable";
+import { Column, DataTable } from "@/src/components/tables/DataTable";
 import { useDeleteSchool, useGetSchools } from "./hook/useSchoolApis";
 import { School } from "@/src/types/types";
 

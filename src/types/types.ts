@@ -40,7 +40,7 @@ export interface Teacher {
   assignment_type: "teaching" | "supervision" | "correction";
   can_create_exams: boolean;
   can_correct_essays: boolean;
-  is_active: boolean ;
+  is_active: boolean;
   user_type: "teacher" | "admin";
   schools: School[];
   created_at: string;
@@ -48,6 +48,20 @@ export interface Teacher {
   email_verified_at: string | null;
   actions: any;
   subject_id: Subject["id"];
+}
+
+export interface TeacherSchoolAssignment {
+  id: number;
+  teacher_id: Teacher["id"];
+  teacher_name: Teacher["name"];
+  teacher_phone: Teacher["phone"];
+  school_id: School["id"];
+  school_address: School["address"];
+  school_name: School["name"];
+  assignment_type: Teacher["assignment_type"];
+  is_active: boolean;
+  assigned_at: string;
+  actions: any;
 }
 
 export interface Student {
@@ -149,4 +163,5 @@ export interface School {
   allowed_ip_range: string;
   is_active: boolean;
   governorate_id: Governorate["id"];
+  governorate: Governorate;
 }
