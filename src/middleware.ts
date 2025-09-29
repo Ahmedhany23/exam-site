@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userType } from "./src/types/types";
+import { userType } from "./types/types";
 
 type UserType = userType["user_type"];
 
