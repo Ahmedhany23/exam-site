@@ -20,9 +20,109 @@
 
 ---
 
----
+----
 
 ## 📸 Screenshots
+
+### Authentication
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/login.png" alt="Login" width="250"/><br/>Login
+    </td>
+    <td align="center">
+      <img src="/public/website/profile.png" alt="Profile" width="250"/><br/>Profile
+    </td>
+    <td align="center">
+      <img src="/public/website/home.png" alt="Home" width="250"/><br/>Home
+    </td>
+  </tr>
+</table>
+
+### Exams
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/exam.png" alt="Exam" width="250"/><br/>Exam
+    </td>
+    <td align="center">
+      <img src="/public/website/examForm.png" alt="Exam Form" width="250"/><br/>Exam Form
+    </td>
+    <td align="center">
+      <img src="/public/website/questionForm.png" alt="Question Form" width="250"/><br/>Question Form
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/public/website/SectionsAndQuestions.png" alt="Sections and Questions" width="250"/><br/>Sections & Questions
+    </td>
+  </tr>
+</table>
+
+### Students
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/student.png" alt="Student" width="250"/><br/>Student
+    </td>
+    <td align="center">
+      <img src="/public/website/studentForm.png" alt="Student Form" width="250"/><br/>Student Form
+    </td>
+  </tr>
+</table>
+
+### Teachers
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/teacher.png" alt="Teacher" width="250"/><br/>Teacher
+    </td>
+    <td align="center">
+      <img src="/public/website/teacherForm.png" alt="Teacher Form" width="250"/><br/>Teacher Form
+    </td>
+    <td align="center">
+      <img src="/public/website/teacherAssignment.png" alt="Teacher Assignment" width="250"/><br/>Teacher Assignment
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/public/website/teacherAssignmentForm.png" alt="Teacher Assignment Form" width="250"/><br/>Teacher Assignment Form
+    </td>
+  </tr>
+</table>
+
+### Schools
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/school.png" alt="School" width="250"/><br/>School
+    </td>
+    <td align="center">
+      <img src="/public/website/schoolForm.png" alt="School Form" width="250"/><br/>School Form
+    </td>
+    <td align="center">
+      <img src="/public/website/schoolAdmins.png" alt="School Admins" width="250"/><br/>School Admins
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/public/website/schoolAdminForm.png" alt="School Admin Form" width="250"/><br/>School Admin Form
+    </td>
+  </tr>
+</table>
+
+### Subjects
+<table>
+  <tr>
+    <td align="center">
+      <img src="/public/website/subject.png" alt="Subject" width="250"/><br/>Subject
+    </td>
+    <td align="center">
+      <img src="/public/website/subjectForm.png" alt="Subject Form" width="250"/><br/>Subject Form
+    </td>
+  </tr>
+</table>
+
 
 <p align="center">
   <img src="/public/website/home.png" alt="Home Page" width="600" />
