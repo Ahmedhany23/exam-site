@@ -26,7 +26,7 @@ import { useRouter } from "next/navigation";
 
 import { useAddEditSchool, useGetSchool } from "../hook/useSchoolApis";
 import { useGetGovernorates } from "@/src/hooks/useGetGovernorate";
-import { SchoolFormValues, schoolSchema } from "../schema/schoolSchema";
+import { SchoolFormValues, schoolSchema } from "../schema/SchoolSchema";
 import { Loader } from "../../ui/loader";
 
 export const AddEditSchool_form = ({ schoolId }: { schoolId: string }) => {
