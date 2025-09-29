@@ -11,7 +11,7 @@ export default function TextField({ form, name, label, ...props }: any) {
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input {...field} {...props} />
+            <Input dir="rtl" {...field} {...props} />
           </FormControl>
           <FormMessage />
         </FormItem>

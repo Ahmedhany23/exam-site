@@ -1,6 +1,6 @@
 <div align="center">
 
-# Million 🚀
+# Exam 🚀
 
 <p>A Next.js 15 project using <b>Turbopack</b> for fast builds and modern tooling. <br /> Includes a rich set of UI components, form handling, validation, and state management.</p>
 
@@ -20,13 +20,75 @@
 
 ---
 
+---
+
+## 📸 Screenshots
+
+<p align="center">
+  <img src="/public/website/home.png" alt="Home Page" width="600" />
+</p>
+
+### Authentication
+
+- **Login**
+  ![Login](/public/website/login.png)
+- **Profile**
+  ![Profile](/public/website/profile.png)
+
+### Exams
+
+- **Exam List**
+  ![Exam](/public/website/exam.png)
+- **Exam Form**
+  ![Exam Form](/public/website/examForm.png)
+- **Question Form**
+  ![Question Form](/public/website/questionForm.png)
+- **Sections & Questions**
+  ![Sections and Questions](/public/website/SectionsAndQuestions.png)
+
+### Students
+
+- **Student List**
+  ![Student](/public/website/student.png)
+- **Student Form**
+  ![Student Form](/public/website/studentForm.png)
+
+### Teachers
+
+- **Teacher List**
+  ![Teacher](/public/website/teacher.png)
+- **Teacher Form**
+  ![Teacher Form](/public/website/teacherForm.png)
+- **Teacher Assignment**
+  ![Teacher Assignment](/public/website/teacherAssignment.png)
+- **Teacher Assignment Form**
+  ![Teacher Assignment Form](/public/website/teacherAssignmentForm.png)
+
+### Schools
+
+- **School List**
+  ![School](/public/website/school.png)
+- **School Admins**
+  ![School Admins](/public/website/schoolAdmins.png)
+- **School Form**
+  ![School Form](/public/website/schoolForm.png)
+- **School Admin Form**
+  ![School Admin Form](/public/website/schoolAdminForm.png)
+
+### Subjects
+
+- **Subject List**
+  ![Subject](/public/website/subject.png)
+- **Subject Form**
+  ![Subject Form](/public/website/subjectForm.png)
+
 ## 📦 Installation
 
 Clone the repository and install dependencies:
 
 ```bash
 git clone <repo-url>
-cd million
+cd exam-site
 npm install
 ```
 

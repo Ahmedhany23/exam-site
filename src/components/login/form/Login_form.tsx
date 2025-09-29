@@ -17,7 +17,6 @@ import { Input } from "@/src/components/ui/input";
 import { Loader } from "lucide-react";
 import { useAuthLogin } from "../hook/useAuthLogin";
 
-// ✅ Zod Schema - unified identifier (email, phone, or national ID) + password
 export const formSchema = z.object({
   identifier: z
     .string()

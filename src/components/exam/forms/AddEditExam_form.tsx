@@ -72,7 +72,7 @@ export const AddEditExam_form = () => {
   }, [exam]);
 
   if (subjectsLoading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   return (
@@ -91,15 +91,15 @@ export const AddEditExam_form = () => {
               value: s.id.toString(),
               label: s.name,
             }))}
+          />{" "}
+          <TextField
+            form={form}
+            name="title"
+            label="العنوان *"
+            placeholder="عنوان الامتحان"
           />
         </div>
 
-        <TextField
-          form={form}
-          name="title"
-          label="العنوان *"
-          placeholder="عنوان الامتحان"
-        />
         <TextField
           form={form}
           name="description"

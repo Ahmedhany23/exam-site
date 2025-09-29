@@ -159,83 +159,86 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
         className="space-y-6 max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-sm border"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {/* First Name */}
-        <FormField
-          control={form.control}
-          name="first_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>الاسم الأول</FormLabel>
-              <Input {...field} placeholder="أدخل الاسم الأول" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* First Name */}
+          <FormField
+            control={form.control}
+            name="first_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>الاسم الأول</FormLabel>
+                <Input {...field} placeholder="أدخل الاسم الأول" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Second Name */}
-        <FormField
-          control={form.control}
-          name="second_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>الاسم الثاني</FormLabel>
-              <Input {...field} placeholder="أدخل الاسم الثاني" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Second Name */}
+          <FormField
+            control={form.control}
+            name="second_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>الاسم الثاني</FormLabel>
+                <Input {...field} placeholder="أدخل الاسم الثاني" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Third Name */}
-        <FormField
-          control={form.control}
-          name="third_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>الاسم الثالث</FormLabel>
-              <Input {...field} placeholder="أدخل الاسم الثالث" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Third Name */}
+          <FormField
+            control={form.control}
+            name="third_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>الاسم الثالث</FormLabel>
+                <Input {...field} placeholder="أدخل الاسم الثالث" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Fourth Name */}
-        <FormField
-          control={form.control}
-          name="fourth_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>الاسم الرابع</FormLabel>
-              <Input {...field} placeholder="أدخل الاسم الرابع" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Fourth Name */}
+          <FormField
+            control={form.control}
+            name="fourth_name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>الاسم الرابع</FormLabel>
+                <Input {...field} placeholder="أدخل الاسم الرابع" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Email */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>البريد الإلكتروني</FormLabel>
+                <Input {...field} placeholder="example@mail.com" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>البريد الإلكتروني</FormLabel>
-              <Input {...field} placeholder="example@mail.com" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Phone */}
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>رقم الهاتف</FormLabel>
-              <Input {...field} placeholder="أدخل رقم الهاتف" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Phone */}
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>رقم الهاتف</FormLabel>
+                <Input {...field} placeholder="أدخل رقم الهاتف" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* National ID */}
         <FormField
@@ -249,32 +252,33 @@ export const AddEditSchoolAdmin_form = ({ adminId }: { adminId: string }) => {
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* password*/}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>كلمة المرور</FormLabel>
+                <Input type="password" {...field} placeholder="********" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* password*/}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>كلمة المرور</FormLabel>
-              <Input type="password" {...field} placeholder="********" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/*password_confirmation*/}
-        <FormField
-          control={form.control}
-          name="password_confirmation"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>تأكيد كلمة المرور</FormLabel>
-              <Input type="password" {...field} placeholder="********" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/*password_confirmation*/}
+          <FormField
+            control={form.control}
+            name="password_confirmation"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>تأكيد كلمة المرور</FormLabel>
+                <Input type="password" {...field} placeholder="********" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* governorate_id */}
         <FormField
