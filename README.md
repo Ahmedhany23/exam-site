@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div align="center">
 
-## Getting Started
+# Million 🚀
 
-First, run the development server:
+<p>A Next.js 15 project using <b>Turbopack</b> for fast builds and modern tooling. <br /> Includes a rich set of UI components, form handling, validation, and state management.</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js 15" />
+  <img src="https://img.shields.io/badge/Turbopack-▲-orange?style=for-the-badge&logo=vercel&logoColor=white" alt="Turbopack" />
+  <img src="https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS v4" />
+  <img src="https://img.shields.io/badge/Zustand-🐻-green?style=for-the-badge" alt="Zustand" />
+  <img src="https://img.shields.io/badge/React_Query-v5-FF4154?style=for-the-badge&logo=react-query&logoColor=white" alt="React Query v5" />
+  <img src="https://img.shields.io/badge/React_Hook_Form-v7-EC5990?style=for-the-badge&logo=react-hook-form&logoColor=white" alt="React Hook Form" />
+  <img src="https://img.shields.io/badge/Zod-validation-blue?style=for-the-badge&logo=zod&logoColor=white" alt="Zod" />
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT" />
+</p>
+
+</div>
+
+---
+
+## 📦 Installation
+
+Clone the repository and install dependencies:
+
+```bash
+git clone <repo-url>
+cd million
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Build for production:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 15 with Turbopack
+- **UI Components**: Radix UI, Lucide Icons, Framer Motion
+- **Forms & Validation**: React Hook Form, Zod, `@hookform/resolvers`
+- **State Management**: Zustand
+- **Data Fetching**: TanStack React Query + Axios
+- **Styling**: Tailwind CSS v4, `tailwind-merge`, `tw-animate-css`
+- **Rich Text Editor**: CKEditor 5
+- **Utilities**: `clsx`, `class-variance-authority`, `js-cookie`, `react-hot-toast`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Scripts
 
-## Deploy on Vercel
+- `npm run dev` → Start development server with **Turbopack**.
+- `npm run build` → Build the production-ready bundle.
+- `npm start` → Run the production server.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚙️ Development Setup
+
+- **TypeScript**: `v5`
+- **Node.js types**: `v20`
+- **React types**: `v19`
+- **Tailwind/PostCSS**: `v4`
+
+---
+
+## 📂 Folder Structure
+
+```
+src
+├── app/          # App Router pages and layouts
+├── components/   # Shared components
+│   ├── ui/       # Primitives like Button, Input, etc.
+│   ├── forms/    # Form-specific components
+│   └── layout/   # Layout components (Navbar, Footer)
+├── lib/          # Utilities and core logic
+│   ├── api.ts    # API fetching logic
+│   ├── utils.ts  # General helper functions
+│   └── validators/ # Zod schemas
+├── hooks/        # Custom React hooks
+├── store/        # Zustand state management stores
+└── styles/       # Global styles
+```
+
+---
+
+## 🛠️ Usage Example
+
+### Using a UI Component
+
+```tsx
+import { Button } from "@/components/ui/Button";
+
+export default function Home() {
+  return <Button>Click me</Button>;
+}
+```
+
+### Form Validation with React Hook Form + Zod
+
+```tsx
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  email: z.string().email({ message: "Invalid email address" }),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export default function SignupForm() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: FormData) => console.log(data);
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <input {...register("email")} placeholder="Email" />
+      {errors.email && <span>{errors.email.message}</span>}
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+```
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT** License.
