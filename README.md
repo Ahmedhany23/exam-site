@@ -16,15 +16,16 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT" />
 </p>
 
+**👉 [Live Demo](https://exam-site-digitopia.vercel.app/login)**
+
 </div>
 
 ---
 
-----
-
 ## 📸 Screenshots
 
 ### Authentication
+
 <table>
   <tr>
     <td align="center">
@@ -40,6 +41,7 @@
 </table>
 
 ### Exams
+
 <table>
   <tr>
     <td align="center">
@@ -60,6 +62,7 @@
 </table>
 
 ### Students
+
 <table>
   <tr>
     <td align="center">
@@ -72,6 +75,7 @@
 </table>
 
 ### Teachers
+
 <table>
   <tr>
     <td align="center">
@@ -92,6 +96,7 @@
 </table>
 
 ### Schools
+
 <table>
   <tr>
     <td align="center">
@@ -112,6 +117,7 @@
 </table>
 
 ### Subjects
+
 <table>
   <tr>
     <td align="center">
@@ -122,9 +128,6 @@
     </td>
   </tr>
 </table>
-
-
-
 
 ## 📦 Installation
 
