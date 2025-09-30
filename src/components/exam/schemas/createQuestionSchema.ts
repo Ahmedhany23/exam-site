@@ -2,7 +2,7 @@ import z from "zod";
 
 // Base schema
 const baseSchema = z.object({
-  question_text: z.string().min(5, "نص السؤال يجب أن لا يقل عن 5 أحرف."),
+  question_text: z.string().min(1, "نص السؤال يجب أن لا يقل عن 1 أحرف."),
   question_image: z.string().nullable().optional().or(z.literal("")),
   points: z.number(),
   is_required: z.boolean(),

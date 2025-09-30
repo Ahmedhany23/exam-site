@@ -6,16 +6,8 @@ import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Exam } from "@/src/types/types";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@radix-ui/react-alert-dialog";
-import { AlertDialogFooter, AlertDialogHeader } from "../ui/alert-dialog";
+
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 
 export const ExamComponent = () => {
   const [page, setPage] = useState(1);

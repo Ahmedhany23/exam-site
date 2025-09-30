@@ -54,7 +54,7 @@ export const useAddOrEditSubject = (subjectId: string) => {
     onSuccess: ({ data }) => {
       queryClient.invalidateQueries({ queryKey: ["subjects"] });
       toast.success(
-        subjectId ? "تم تعديل الموضوع بنجاح 🎉" : "تم اضافة الموضوع بنجاح 🎉"
+        subjectId ? "تم تعديل المادة بنجاح 🎉" : "تم اضافة المادة بنجاح 🎉"
       );
     },
     onError: (err: any) => {

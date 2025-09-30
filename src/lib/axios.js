@@ -49,8 +49,6 @@ axiosInstance.interceptors.response.use(
       ("use server");
       handleLogout();
     }
-    if (error.response.data.status === false) {
-    }
     return Promise.reject(error);
   }
 );

@@ -9,7 +9,6 @@ const accessRules: Record<UserType, string[]> = {
     "/home",
     "/school-admins",
     "/teachers",
-    "/exams",
     "/teacher-school-assignment",
   ],
   school_admin: ["/home", "/students"],
@@ -28,6 +27,8 @@ export function middleware(request: NextRequest) {
   console.log("📍 Pathname:", pathname);
   console.log("🔐 Token:", token);
   console.log("👤 UserType:", userType);
+
+
 
   // Allow access to login page without token
   if (pathname.startsWith("/login") && !token) {
@@ -89,6 +90,6 @@ export const config = {
     "/school-admins",
     "/teachers",
     "/exams",
-    "/teacher-school-assignment",
+    "/teacher-school-assignment", 
   ],
 };

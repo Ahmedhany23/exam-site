@@ -90,7 +90,7 @@ export function DashboardLayout({ children }: LayoutProps) {
         label: " الامتحانات",
         icon: Book,
         permission:
-          user?.user_type === "teacher" || user?.user_type === "ministry_admin",
+          user?.user_type === "teacher",
       },
       { href: "/profile", label: "الملف الشخصي", icon: User, permission: true },
     ],
