@@ -260,6 +260,7 @@ export const useGetExamSection = (sectionId: string) => {
       return res.data;
     },
     retry: false,
+    enabled: !!sectionId,
   });
 
   return { data, isLoading, isError };
