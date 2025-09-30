@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { handleLogout } from "../actions/auth";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: `https://exam-api.koyeb.app/api`,
   headers: {
     common: {
       platform: "web",
