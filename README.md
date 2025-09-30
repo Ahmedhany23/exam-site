@@ -16,7 +16,12 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT" />
 </p>
 
-**👉 [Live Demo](https://exam-site-digitopia.vercel.app/login)**
+<div align="center">
+  <a href="https://exam-site-digitopia.vercel.app/login" 
+     style="font-size: 22px; font-weight: bold; color: #fff; background: #e63946; padding: 12px 24px; border-radius: 8px; text-decoration: none;">
+    🚀 Live Demo
+  </a>
+</div>
 
 </div>
 
