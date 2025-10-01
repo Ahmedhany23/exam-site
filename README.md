@@ -167,7 +167,6 @@ npm start
 - **State Management**: Zustand
 - **Data Fetching**: TanStack React Query + Axios
 - **Styling**: Tailwind CSS v4, `tailwind-merge`, `tw-animate-css`
-- **Rich Text Editor**: CKEditor 5
 - **Utilities**: `clsx`, `class-variance-authority`, `js-cookie`, `react-hot-toast`
 
 ---
@@ -206,6 +205,40 @@ src
 ├── store/        # Zustand state management stores
 └── styles/       # Global styles
 ```
+
+---
+
+<h2>👤 Demo Accounts</h2>
+<p>Use the following credentials to explore different roles in the live demo:</p>
+
+<table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: left;">
+  <thead style="background-color: #f2f2f2;">
+    <tr>
+      <th>Role</th>
+      <th>Email</th>
+      <th>Password</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Ministry Admin</td>
+      <td>admin@digitopia.com</td>
+      <td>12345678</td>
+    </tr>
+    <tr>
+      <td>Teacher</td>
+      <td>ahmedhany.22@hotmail.com</td>
+      <td>12345678</td>
+    </tr>
+    <tr>
+      <td>School Admin</td>
+      <td>schoolAdmin@gmail.com</td>
+      <td>12345678</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>🔐 Note:</strong> These accounts are for testing purposes only. Please do not modify or delete any critical data.</p>
 
 ---
 
